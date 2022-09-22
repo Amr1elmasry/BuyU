@@ -4,16 +4,19 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BuyU.Models
 {
-    public partial class Category
+    public partial class Brand
     {
-        public Category()
+        public Brand()
         {
             Products = new HashSet<Product>();
         }
 
-        [Key]
-        public int CatId { get; set; }
-        public string? Name { get; set; }
+        public int BrandId { get; set; }
+        
+        [Required , MaxLength(50)]
+        public string BrandName { get; set; }
+        
+        [MaxLength(500)]
         public string? Description { get; set; }
         public string? Photo { get; set; }
 
