@@ -9,92 +9,27 @@
     <title>Index</title>
 </head>
 <body>
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Name)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Price)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Color)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Size)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Season)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Quantity)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SellerId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DiscountId)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Cat)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Name)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Price)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Photo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Color)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Size)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Season)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Quantity)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SellerId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DiscountId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Cat.CatId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.ProductId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProductId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
-            </td>
-        </tr>
+    <p>
+        <a asp-action="Create">Create New</a>
+    </p>
+    <div class="row">
+    @foreach (var item in Model) {
+        <div class="col-3 ">
+            <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                <div class=" img-fluid text-center ">
+                    <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
+            </div>
+            <div class="card-body justify-content-between">
+                <h5 class="card-title h-25 ">@item.Name</h5>
+                <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
+                <div class="col-md-13 ">
+                    <a style="margin-right:10px" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                    <a style="margin-right:10px" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                    <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                </div>
+            </div>
+            </div>
+        </div>
 }
-    </tbody>
-</table>
 </body>
 </html>
