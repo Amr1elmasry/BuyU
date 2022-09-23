@@ -8,9 +8,11 @@ using Microsoft.EntityFrameworkCore;
 using BuyU.Models;
 using System.Collections;
 using BuyU.ViewModel;
+using Microsoft.AspNetCore.Authorization;
 
-namespace BuyU.Controllers
+namespace BuyU.Controllers.Admin
 {
+    
     public class AdminProductsController : Controller
     {
         private readonly BuyUContext _context;
@@ -18,7 +20,7 @@ namespace BuyU.Controllers
         {
             "Black" , "White"  ,  "Red", "Blue" , "Gray" , "Selver" , "Gold"
         };
-        
+
 
         public AdminProductsController(BuyUContext context)
         {
@@ -54,7 +56,7 @@ namespace BuyU.Controllers
         // GET: AdminProducts/Create
         public IActionResult Create()
         {
-            ViewData["BrandName"] = new SelectList(_context.Brands, "BrandId","BrandName");
+            ViewData["BrandName"] = new SelectList(_context.Brands, "BrandId", "BrandName");
             ViewData["Color"] = new SelectList(Colors, "Color");
 
             return View();
@@ -83,7 +85,7 @@ namespace BuyU.Controllers
             _context.Add(product);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
-            
+
         }
 
         // GET: AdminProducts/Edit/5
@@ -100,7 +102,8 @@ namespace BuyU.Controllers
             {
                 return NotFound();
             }
-            ViewData["CatId"] = new SelectList(_context.Brands,"BrandId","BrandName" );
+            ViewData["BrandName"] = new SelectList(_context.Brands, "BrandId", "BrandName");
+            ViewData["Color"] = new SelectList(Colors, "Color");
             return View(product);
         }
 
@@ -115,7 +118,7 @@ namespace BuyU.Controllers
             {
                 return NotFound();
             }
-           
+
             try
             {
                 _context.Update(product);
@@ -133,7 +136,7 @@ namespace BuyU.Controllers
                 }
             }
             return RedirectToAction(nameof(Index));
-            
+
             //ViewData["CatId"] = new SelectList(_context.Categories, "CatId", "CatId", product.CatId);
             //return View(product);
         }
@@ -171,14 +174,14 @@ namespace BuyU.Controllers
             {
                 _context.Products.Remove(product);
             }
-            
+
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ProductExists(int id)
         {
-          return _context.Products.Any(e => e.ProductId == id);
+            return _context.Products.Any(e => e.ProductId == id);
         }
     }
 }
