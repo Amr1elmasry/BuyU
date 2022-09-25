@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 
 namespace BuyU.Models
 {
-    public partial class BuyUContext : DbContext
+    public partial class BuyUContext : DbContext 
     {
 
         public BuyUContext(DbContextOptions<BuyUContext> options)

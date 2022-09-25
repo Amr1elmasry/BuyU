@@ -6,9 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BuyU.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BuyU.Controllers.Admin
 {
+
+    [Authorize(Roles ="Admin")]
     public class AdminBrandsController : Controller
     {
         private readonly BuyUContext _context;
@@ -18,6 +21,7 @@ namespace BuyU.Controllers.Admin
             _context = context;
         }
 
+        
         // GET: AdminBrands
         public async Task<IActionResult> Index()
         {

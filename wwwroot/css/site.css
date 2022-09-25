@@ -16,3 +16,21 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+
+
+/*Custom CSS Files*/
+
+.profile-picture {
+    height: 295px;
+    width: 295px;
+    object-fit: contain;
+    
+
+}
+
+.avatar {
+    height: 40px;
+    width: 40px;
+    object-fit: fill;
+}

@@ -1,13 +1,28 @@
 using BuyU.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity;
+using BuyU.Data;
+using BuyUContext = BuyU.Models.BuyUContext;
 
 var builder = WebApplication.CreateBuilder(args);
+var connectionString = builder.Configuration.GetConnectionString("BuyUContextConnection") ?? throw new InvalidOperationException("Connection string 'BuyUContextConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContext<BuyUContext>(options => options.UseSqlServer(
     "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
    ));
+builder.Services.AddDbContext<BuyUIdentityContext>(options => options.UseSqlServer(
+    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
+   ));
+
+builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
+    .AddEntityFrameworkStores<BuyUIdentityContext>()
+    .AddDefaultUI()
+    .AddDefaultTokenProviders();
+
+//builder.Services.AddDefaultIdentity<BuyUUser>(options => options.SignIn.RequireConfirmedAccount = true)
+//    .AddEntityFrameworkStores<BuyUContext>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -22,11 +37,14 @@ app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
+app.UseAuthentication();;
 
 app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
+
+app.MapRazorPages();
 
 app.Run();

@@ -1,0 +1,62 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+    ViewData["ActivePage"] = ManageNavPages.Index;
+}
+
+<h3>@ViewData["Title"]</h3>
+<partial name="_StatusMessage" for="StatusMessage" />
+<form id="profile-form" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-6">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-floating">
+                <input asp-for="Input.FirstName" class="form-control"  />
+                <label asp-for="Input.FirstName" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.LastName" class="form-control"  />
+                <label asp-for="Input.LastName" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Username" class="form-control" disabled />
+                <label asp-for="Username" class="form-label"></label>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+                <button id="update-profile-button" type="submit" class="w-100 btn btn-lg btn-primary">Save</button>
+            </div>
+            <div class="col-md-6 mb-5">
+                
+                <div class="form-group">
+                    @if (Model.Input.Image != null)
+                    {
+                        <img id="Image" alt="profile" class="profile-picture" src="data:image/*;base64,@(Convert.ToBase64String(Model.Input.Image))" />
+                    }
+                    else
+                    {
+                    <img id="Image" alt="profile" class="profile-picture" src="~/Images/istockphoto-1300845620-612x612.jpg" />
+                    }
+                    <div class="custom-file ">
+                        <input type="file"
+                                accept="image/*"
+                                asp-for="Input.Image"
+                                class="custom-file-input"
+                                onchange="document.getElementById('Image').src = window.URL.createObjectURL(this.files[0])" />
+                        <label class="custom-file-label" asp-for="Input.Image">Choose picture...</label>
+                        <span asp-validation-for="Input.Image" class="text-danger"></span>
+                    </div>
+                </div>
+            <label asp-for="Input.Image" class="w-100"> Profile Picture</label>
+            </div>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

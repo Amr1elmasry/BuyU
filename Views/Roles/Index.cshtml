@@ -1,0 +1,28 @@
+﻿@model IEnumerable<IdentityRole>
+
+@{
+    ViewData["Title"] = "Roles";
+}
+
+<h1>Roles</h1>
+
+<table class="table table-striped mt-4">
+
+    <thead>
+        <tr class="bg-primary text-white">
+            <th>Id</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Id</td>
+                <td>@role.Name</td>
+            </tr>
+            
+        }
+    </tbody>
+</table>

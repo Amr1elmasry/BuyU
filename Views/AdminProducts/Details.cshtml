@@ -63,12 +63,12 @@
             @Html.DisplayNameFor(model => model.Brand)
         </dt>
         <dd class="btn btn-outline-primary">
-            <a asp-controller="AdminBrands" asp-action="Index" asp-route-Id ="@Model.BrandId">@Model.Brand.BrandName</a>
+            <a asp-controller="AdminBrands" asp-action="Details" asp-route-Id ="@Model.BrandId">@Model.Brand.BrandName</a>
         </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
+    <a class="btn btn-primary" asp-action="Edit" asp-route-id="@Model?.ProductId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
 </body>

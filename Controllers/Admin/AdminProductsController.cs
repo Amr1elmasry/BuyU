@@ -12,7 +12,8 @@ using Microsoft.AspNetCore.Authorization;
 
 namespace BuyU.Controllers.Admin
 {
-    
+    [Authorize(Roles = "Admin")]
+
     public class AdminProductsController : Controller
     {
         private readonly BuyUContext _context;
@@ -112,7 +113,7 @@ namespace BuyU.Controllers.Admin
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,Photo,Color,BrandName,Quantity,DiscountId")] Product product)
+        public async Task<IActionResult> Edit(int id, [Bind("ProductId,Name,Description,Price,Photo,Color,BrandId,Quantity,DiscountId")] Product product)
         {
             if (id != product.ProductId)
             {
