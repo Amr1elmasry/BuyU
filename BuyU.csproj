@@ -22,4 +22,8 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.9" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\Admin\" />
+  </ItemGroup>
+
 </Project>
