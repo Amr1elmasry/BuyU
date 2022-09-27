@@ -95,6 +95,11 @@ namespace BuyU.Areas.Identity.Pages.Account
             [EmailAddress]
             [Display(Name = "Email")]
             public string Email { get; set; }
+            
+            
+            [Required]
+            [Display(Name = "User Name")]
+            public string UserName { get; set; }
 
             /// <summary>
             ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
@@ -133,7 +138,7 @@ namespace BuyU.Areas.Identity.Pages.Account
                 var user = CreateUser();
                 user.FirstName = Input.FirstName;
                 user.LastName = Input.LastName;
-                user.UserName = new MailAddress(Input.Email).User;
+                user.UserName = Input.UserName;
 
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
                 

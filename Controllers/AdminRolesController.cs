@@ -9,11 +9,11 @@ using System.Data;
 namespace BuyU.Controllers.Admin
 {
     [Authorize(Roles = "Admin")]
-    public class RolesController : Controller
+    public class AdminRolesController : Controller
     {
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        public RolesController(RoleManager<IdentityRole> roleManager)
+        public AdminRolesController(RoleManager<IdentityRole> roleManager)
         {
             _roleManager = roleManager;
         }
