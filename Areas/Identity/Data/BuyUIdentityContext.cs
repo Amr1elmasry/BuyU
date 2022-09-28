@@ -20,5 +20,11 @@ public class BuyUIdentityContext : IdentityDbContext<ApplicationUser>
         // Add your customizations after calling base.OnModelCreating(builder);
 
         builder.Entity<ApplicationUser>().ToTable("AspNetUsers");
+        builder.Entity<IdentityRole>().ToTable("AspNetRoles");
+        builder.Entity<IdentityUserRole<string>>().ToTable("AspNetUserRoles");
+        builder.Entity<IdentityUserClaim<string>>().ToTable("AspNetUserClaims");
+        builder.Entity<IdentityUserLogin<string>>().ToTable("AspNetUserLogins");
+        builder.Entity<IdentityRoleClaim<string>>().ToTable("AspNetRoleClaims");
+        builder.Entity<IdentityUserToken<string>>().ToTable("AspNetUserTokens");
     }
 }

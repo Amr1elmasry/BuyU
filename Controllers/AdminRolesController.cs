@@ -38,6 +38,7 @@ namespace BuyU.Controllers.Admin
                 return View("Index", await _roleManager.Roles.ToListAsync());
             }
             await _roleManager.CreateAsync(new IdentityRole(model.Name.Trim()));
+            
             return RedirectToAction(nameof(Index));
 
         }

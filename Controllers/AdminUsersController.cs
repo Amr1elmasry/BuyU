@@ -23,22 +23,13 @@ namespace BuyU.Controllers.Admin
         {
             var users = await _userManager.Users.Select(user => new UserViewModel
             {
-                UserName = user.UserName,
-                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                UserName = user.UserName,
                 Email = user.Email,
                 Roles = _userManager.GetRolesAsync(user).Result
             }).ToListAsync();
 
-            var useradmins = users.Where(r => r.Roles.ToList().Contains("Admin"));
-            
-            foreach (var admin in useradmins.ToList())
-            {
-                users.Remove((UserViewModel)admin);
-                users.Insert(0,admin);
-            }
-            
             return View(users);
         }
 

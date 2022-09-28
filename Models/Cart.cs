@@ -1,4 +1,6 @@
-﻿using MessagePack;
+﻿using BuyU.Data;
+using MessagePack;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Build.Framework;
 using System;
 using System.Collections.Generic;
@@ -9,15 +11,12 @@ namespace BuyU.Models
     public partial class Cart
     {
 
-
+        [Key("CartId")]
         public int CartId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public int? ProductId { get; set; }
 
-        [Required]
-        public int? Qty { get; set; }
-
         [ForeignKey("UserId")]
-        public User? User { get; set; } 
+        public ApplicationUser User { get; set; } 
     }
 }

@@ -4,6 +4,7 @@ using BuyU.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuyU.Migrations.BuyUIdentity
 {
     [DbContext(typeof(BuyUIdentityContext))]
-    partial class BuyUIdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20220927210318_get identity tables")]
+    partial class getidentitytables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
