@@ -36,8 +36,8 @@ namespace BuyU.Controllers.Admin
         public async Task<IActionResult> Add()
         {
 
-            
-            var roles = await _roleManager.Roles.Select(r=>new RoleViewModel {RoleName = r.Name,}).ToListAsync();
+
+            var roles = await _roleManager.Roles.Select(r => new RoleViewModel { RoleName = r.Name, }).ToListAsync();
             var viewModel = new AddUserViewModel
             {
                 Roles = roles
@@ -52,7 +52,7 @@ namespace BuyU.Controllers.Admin
         {
             if (!ModelState.IsValid)
                 return View(model);
-            if (!model.Roles.Any(r=>r.IsSelected))
+            if (!model.Roles.Any(r => r.IsSelected))
             {
                 ModelState.AddModelError("Roles", "Please select at least one model!");
                 return View(model);
@@ -62,7 +62,7 @@ namespace BuyU.Controllers.Admin
                 ModelState.AddModelError("UserName", "UserName Already Exists!");
                 return View(model);
             }
-            if (await _userManager.FindByEmailAsync(model.Email)!= null)
+            if (await _userManager.FindByEmailAsync(model.Email) != null)
             {
                 ModelState.AddModelError("Email", "Email Already Exists!");
                 return View(model);
@@ -75,20 +75,75 @@ namespace BuyU.Controllers.Admin
                 FirstName = model.FirstName,
                 LastName = model.LastName,
             };
-            var result = await _userManager.CreateAsync(user , model.Password);
+            var result = await _userManager.CreateAsync(user, model.Password);
             if (!result.Succeeded)
             {
-                foreach(var error in result.Errors)
+                foreach (var error in result.Errors)
                 {
                     ModelState.AddModelError("Roles", error.Description);
                 }
                 return View(model);
             }
-            await _userManager.AddToRolesAsync(user, model.Roles.Where(r=>r.IsSelected).Select(r => r.RoleName));
+            await _userManager.AddToRolesAsync(user, model.Roles.Where(r => r.IsSelected).Select(r => r.RoleName));
             return RedirectToAction(nameof(Index));
         }
 
-        public async Task<IActionResult> ManageRoles(string userId)
+
+        public async Task<IActionResult> Edit(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+                return NotFound();
+
+            var viewModel = new ProfileFromViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                UserName = user.UserName,
+                Email = user.Email,
+            };
+            return View(viewModel);
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Edit(ProfileFromViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByIdAsync(model.Id);
+
+            if (user == null)
+                return NotFound();
+
+            var userWithSameUserName = await _userManager.FindByNameAsync(model.UserName);
+            if (userWithSameUserName != null && userWithSameUserName.Id != model.Id)
+            {
+                ModelState.AddModelError("UserName", "This UserName is already assignd to another user");
+                return View(model);
+            }
+
+            var userWithSameEmail = await _userManager.FindByEmailAsync(model.Email);
+            if (userWithSameEmail != null && userWithSameEmail.Id != model.Id)
+            {
+                ModelState.AddModelError("Email", "This email is already assignd to another user");
+                return View(model);
+            }
+
+            user.FirstName = model.FirstName;
+            user.LastName = model.LastName;
+            user.UserName = model.UserName;
+            user.Email = model.Email;
+            await _userManager.UpdateAsync(user);
+
+            return RedirectToAction(nameof(Index));
+        }
+    
+
+    public async Task<IActionResult> ManageRoles(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
             if (user == null)

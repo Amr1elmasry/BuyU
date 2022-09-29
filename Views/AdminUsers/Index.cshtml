@@ -31,7 +31,8 @@
                 <td>@string.Join(" , ", user.Roles.ToList())</td>
                 <td>
                     <a class="btn btn-primary" asp-controller="AdminUsers" asp-action="ManageRoles" asp-route-userId="@user.Id">Manage Roles</a>
-                    
+                    <a class="btn btn-secondary" asp-controller="AdminUsers" asp-action="Edit" asp-route-userId="@user.Id">Edit</a>
+                    <a href="javascript:;" class="btn btn-danger js-delete" data-id="@user.Id">Delete</a>
                 </td>
             </tr>
         }
