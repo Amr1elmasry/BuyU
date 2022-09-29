@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
 using BuyU.Data;
 using BuyUContext = BuyU.Models.BuyUContext;
+using NToastNotify;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BuyUContextConnection") ?? throw new InvalidOperationException("Connection string 'BuyUContextConnection' not found.");
@@ -11,6 +12,15 @@ var connectionString = builder.Configuration.GetConnectionString("BuyUContextCon
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContextFactory<BuyUContext>(options => options.UseSqlServer(
     connectionString),ServiceLifetime.Transient);
+
+
+builder.Services.AddMvc().AddNToastNotifyToastr(new NToastNotify.ToastrOptions()
+{
+    ProgressBar = true,
+    PositionClass = ToastPositions.TopRight,
+    PreventDuplicates = true,
+    CloseButton = true,
+});
 //builder.Services.AddDbContextFactory<BuyUIdentityContext>(options => options.UseSqlServer(
 //    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
 //   ),

@@ -8,6 +8,20 @@
       "files": [
         "jquery.validate.min.js"
       ]
+    },
+    {
+      "library": "bootbox.js@5.5.3",
+      "destination": "wwwroot/lib/bootbox.js/",
+      "files": [
+        "bootbox.min.js"
+      ]
+    },
+    {
+      "library": "animateCSS@1.2.2",
+      "destination": "wwwroot/lib/animateCSS/",
+      "files": [
+        "jquery.animatecss.min.js"
+      ]
     }
   ]
 }

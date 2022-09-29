@@ -39,3 +39,44 @@
     </tbody>
 
 </table>
+
+
+@section Scripts {
+    <script>
+        $(document).ready(function ()
+        {
+            $('.js-delete').on('click' , function ()
+            {
+                var btn = $(this);
+                bootbox.confirm({
+                    message: "This is a confirm with custom button text and color! Do you like it?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                                className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                                className: 'btn-success'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/api/apiusers/?userId='+ btn.data('id'),
+                                method: 'DELETE',
+                                success: function(){
+                                        btn.parents('tr').fadeOut();
+                                        toastr.success('User deleted successfully');
+                                },
+                                error: function(){
+                                        toastr.error('Somthing went wrong');
+                                }
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
