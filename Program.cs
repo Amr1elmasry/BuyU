@@ -10,19 +10,17 @@ var connectionString = builder.Configuration.GetConnectionString("BuyUContextCon
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddDbContextFactory<BuyUContext>(options => options.UseSqlServer(
-    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
-   ),
-    ServiceLifetime.Transient);
-builder.Services.AddDbContextFactory<BuyUIdentityContext>(options => options.UseSqlServer(
-    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
-   ),
-    ServiceLifetime.Transient
-);
+    connectionString),ServiceLifetime.Transient);
+//builder.Services.AddDbContextFactory<BuyUIdentityContext>(options => options.UseSqlServer(
+//    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
+//   ),
+//    ServiceLifetime.Transient
+//);
 
 
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
-    .AddEntityFrameworkStores<BuyUIdentityContext>()
+    .AddEntityFrameworkStores<BuyUContext>()
     .AddDefaultUI()
     .AddDefaultTokenProviders();
 

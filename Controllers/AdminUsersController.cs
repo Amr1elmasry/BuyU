@@ -19,17 +19,17 @@ namespace BuyU.Controllers.Admin
             _roleManager = roleManager;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
-            var users = await _userManager.Users.Select(user => new UserViewModel
+            var users = _userManager.Users.Select(user => new UserViewModel
             {
+                Id = user.Id,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
                 UserName = user.UserName,
                 Email = user.Email,
-                Roles = _userManager.GetRolesAsync(user).Result
-            }).ToListAsync();
-
+                Roles = _userManager.GetRolesAsync(user).Result,
+            });
             return View(users);
         }
 

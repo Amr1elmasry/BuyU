@@ -113,7 +113,15 @@ namespace BuyU.Areas.Identity.Pages.Account
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-            var username = new EmailAddressAttribute().IsValid(Input.Email) ? _userManager.FindByEmailAsync(Input.Email).Result.UserName : Input.Email; 
+            string username = "a";
+            if (new EmailAddressAttribute().IsValid(Input.Email))
+            {
+                var tempusername = await _userManager.FindByEmailAsync(Input.Email);
+                if (tempusername!=null)
+                    username = _userManager.FindByEmailAsync(Input.Email).Result.UserName;
+            }
+            else
+                username = Input.Email;
 
             if (ModelState.IsValid)
             {
