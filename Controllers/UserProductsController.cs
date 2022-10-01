@@ -1,28 +1,24 @@
 ﻿using BuyU.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Diagnostics;
 
 namespace BuyU.Controllers
 {
-    public class HomeController : Controller
+    [Route ("Products/[action]")]
+    public class UserProductsController : Controller
     {
         private readonly BuyUContext _context;
-        private readonly ILogger<HomeController> _logger;
 
-        public HomeController(ILogger<HomeController> logger, BuyUContext context)
+        public UserProductsController(BuyUContext buyUContext)
         {
-            _logger = logger;
-            _context = context; 
+            _context = buyUContext;
         }
-
 
         // GET: UserProductsController
         public async Task<IActionResult> Index()
         {
-            
-            var buyUContext = _context.Products.Include(p => p.Brand);
-            return View(await buyUContext.ToListAsync());
+            return RedirectToAction("Index", "Home");
 
         }
         [HttpPost]
@@ -40,9 +36,23 @@ namespace BuyU.Controllers
 
         }
 
-        public ActionResult Details(int id)
+        // GET: UserProductsController/Details/5
+        public async Task<IActionResult> Details(int? id)
         {
-            return RedirectToAction("Details","UserProduct",new {id = id});
+            if (id == null || _context.Products == null)
+            {
+                return NotFound();
+            }
+
+            var product = await _context.Products
+                .Include(p => p.Brand)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound();
+            }
+
+            return View(product);
         }
 
     }

@@ -1,8 +1,8 @@
 ﻿@model IEnumerable<BuyU.Models.Product>
-
 @{
     ViewData["Title"] = "BuyU";
 }
+
 
 
 
@@ -16,9 +16,9 @@
 </head>
 <body>
 
+
     <div class="row">
         <form asp-action="Index" method="POST" class="input-group">
-   
             <input class="form-control" type="text" id="sKey" name="searchKey" value=@ViewBag.Skey />
             <div class="input-group-btn">
                 <button type="submit" class="btn btn-primary" onclick="myFunction()">
@@ -33,7 +33,6 @@
         </form>
     </div>
     <div class="row mt-3">
-
         @if (!Model.Any())
         {
             var x = ViewBag.Skey;
@@ -54,7 +53,7 @@
                         <h5 class="card-title h-25 ">@item.Name</h5>
                         <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
                         <div class="col-md-13 ">
-                            
+
                             @if (User.IsInRole("Admin"))
                             {
                                 con = "AdminProducts";
@@ -64,7 +63,7 @@
                                 con = "UserProducts";
                             }
                             <a style="margin-right:10px" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-
+                            
                         </div>
                     </div>
                 </div>
@@ -74,6 +73,5 @@
 
 </body>
 </html>
-
 
 

@@ -1,7 +1,6 @@
 using BuyU.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity;
-using BuyU.Data;
 using BuyUContext = BuyU.Models.BuyUContext;
 using NToastNotify;
 

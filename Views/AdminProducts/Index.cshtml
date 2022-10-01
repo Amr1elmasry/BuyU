@@ -15,7 +15,7 @@
     </p>
     <div class="row">
         <form asp-action="Index" method="POST" class="input-group">
-            <input class="form-control" type="text" id="sKey" name="searchKey" />
+            <input class="form-control" type="text" id="sKey" name="searchKey" value=@ViewBag.Skey />
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-primary" onclick="myFunction()">
                         <i class="bi bi-check"></i>
@@ -38,6 +38,7 @@
             
         }
         @foreach (var item in Model) {
+            string con;
             <div class="col-3 ">
                 <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
                     <div class=" img-fluid text-center ">
@@ -47,9 +48,17 @@
                     <h5 class="card-title h-25 ">@item.Name</h5>
                     <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
                     <div class="col-md-13 ">
-                        <a style="margin-right:10px" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                        <a style="margin-right:10px" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-                        <a asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                con = "AdminProducts";
+                            }
+                            else
+                            {
+                                con = "UserProducts";
+                            }
+                            <a style="margin-right:10px" asp-controller=@con asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                            <a style="margin-right:10px" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                            <a asp-action="Delete" asp-controller=@con asp-route-id="@item.ProductId">Delete</a>
                     </div>
                 </div>
                 </div>
