@@ -164,8 +164,11 @@ namespace BuyU.Controllers.Admin
 
         public async Task<IActionResult> ProductsOfBrand (int id)
         {
-            var brand = await _context.Brands.SingleOrDefaultAsync(b => b.BrandId == id);
-            var products = await _context.Products.Where(p => p.BrandId == brand.BrandId).ToListAsync();
+            var brand = await _context.Brands.Include(p => p.Products).SingleOrDefaultAsync(b => b.BrandId == id);
+
+            //var products = await _context.Products.Where(p => p.BrandId == brand.BrandId).ToListAsync();
+            var products = brand.Products.ToList();
+            ViewData["BrandName"] = brand.BrandName;
             return View(products);
         }
     }

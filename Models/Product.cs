@@ -25,6 +25,6 @@ namespace BuyU.Models
         public int? DiscountId { get; set; }
 
         [ForeignKey("BrandId")]
-        public virtual Brand Brand { get; set; } = null!;
+        public virtual Brand Brand { get; set; } 
     }
 }

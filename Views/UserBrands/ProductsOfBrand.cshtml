@@ -6,7 +6,7 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width" />
-    <title>Index</title>
+    <title>Products </title>
 </head>
 <body>
     <h1 class="badge bg-secondary fs-6 mb-4">
@@ -24,9 +24,7 @@
                         <h5 class="card-title h-25 ">@item.Name</h5>
                         <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
                         <div class="col-md-13 ">
-                            <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                            <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-                            <a asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            <a style="margin-right:10px" asp-controller="UserProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
                         </div>
                     </div>
                 </div>

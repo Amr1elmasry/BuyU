@@ -9,20 +9,19 @@ namespace BuyU.Controllers
     {
         private readonly BuyUContext _context;
         private readonly ILogger<HomeController> _logger;
-
         public HomeController(ILogger<HomeController> logger, BuyUContext context)
         {
             _logger = logger;
-            _context = context; 
+            _context = context;
+    
         }
 
 
         // GET: UserProductsController
         public async Task<IActionResult> Index()
         {
-            
             var buyUContext = _context.Products.Include(p => p.Brand);
-            return View(await buyUContext.ToListAsync());
+            return View(await buyUContext.OrderBy(p=>p.ProductId).ToListAsync());
 
         }
         [HttpPost]
