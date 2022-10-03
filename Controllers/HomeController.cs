@@ -25,19 +25,17 @@ namespace BuyU.Controllers
 
         }
         [HttpPost]
-        public async Task<IActionResult> Index(string? searchKey)
+        public async Task<IActionResult> Index(string? searchKey )
         {
             ViewData["Skey"] = searchKey;
             var buyUContext = _context.Products.Include(p => p.Brand);
-
-            if (searchKey == null)
-                return View(await buyUContext.ToListAsync());
             if (searchKey != null)
                 return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
 
             return View(await buyUContext.ToListAsync());
 
         }
+
 
         public ActionResult Details(int id)
         {
