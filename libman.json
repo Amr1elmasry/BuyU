@@ -17,15 +17,29 @@
       ]
     },
     {
+      "library": "datatable@2.0.2",
+      "destination": "wwwroot/lib/datatable/"
+    },
+    {
       "library": "animateCSS@1.2.2",
       "destination": "wwwroot/lib/animateCSS/",
       "files": [
-        "jquery.animatecss.min.js"
+        "jquery.animatecss.min.js",
+        "jquery.animatecss.js"
       ]
     },
     {
-      "library": "datatable@2.0.2",
-      "destination": "wwwroot/lib/datatable/"
+      "library": "animate.css@4.1.1",
+      "destination": "wwwroot/lib/animate.css/"
+    },
+    {
+      "provider": "unpkg",
+      "library": "@microsoft/signalr@latest",
+      "destination": "wwwroot/js/signalr/",
+      "files": [
+        "dist/browser/signalr.js",
+        "dist/browser/signalr.min.js"
+      ]
     }
   ]
 }

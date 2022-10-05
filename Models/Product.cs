@@ -26,5 +26,7 @@ namespace BuyU.Models
 
         [ForeignKey("BrandId")]
         public virtual Brand Brand { get; set; } 
+
+        public ICollection<Cart> Carts { get; set; }
     }
 }

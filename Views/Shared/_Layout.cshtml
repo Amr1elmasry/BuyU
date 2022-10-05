@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BuyU.styles.css" asp-append-version="true" />
+    <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
     
 </head>
 <body>
@@ -26,6 +27,9 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="UserCart" asp-action="CartProducts">Cart</a>
+                        </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -39,6 +43,12 @@
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="AdminUsers" asp-action="Index">Manage Users</a>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Home" asp-action="ChatWithAdmin">Chat With Admin</a>
                             </li>
                         }
                     </ul>
@@ -64,7 +74,6 @@
     <script src="e:\studying\dotnet\buyu project\buyu\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
-    <script src="~/lib/animatecss/jquery.animatecss.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("NToastNotify")

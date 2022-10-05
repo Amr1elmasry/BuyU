@@ -46,7 +46,7 @@ namespace BuyU.Controllers
             //var products = await _context.Products.Where(p => p.BrandId == brand.BrandId).ToListAsync();
             ViewData["BrandName"] = brand.BrandName;
             var products = brand.Products.ToList();
-            return View(products.OrderBy(s=> Guid.NewGuid()).Take(products.Count()));
+            return View(products);
         }
     }
 }

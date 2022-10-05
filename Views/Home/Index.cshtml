@@ -3,10 +3,6 @@
 @{
     ViewData["Title"] = "BuyU";
 }
-
-
-
-
 <!DOCTYPE html>
 
 <html>
@@ -61,8 +57,16 @@
                             else
                             {
                                 con = "UserProducts";
+                                
                             }
-                            <a style="margin-right:10px" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                            <div class=" card-footer ">
+                                <a class="btn btn-outline-secondary btn-sm mb-3" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+
+                                @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user && p.Products.Any(p => p.ProductId == item.ProductId)))
+                                {
+                                    <a class="btn btn-primary btn-sm mb-3" asp-controller="UserCart" asp-action="AddToCart" asp-route-id="@item.ProductId" onclick="window.location.href='location'">Add To Cart</a>
+                                }
+                            </div>
 
                         </div>
                     </div>

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using BuyUContext = BuyU.Models.BuyUContext;
 using NToastNotify;
 using BuyU.Controllers;
+using BuyU.Hubs;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BuyUContextConnection") ?? throw new InvalidOperationException("Connection string 'BuyUContextConnection' not found.");
@@ -21,6 +22,8 @@ builder.Services.AddMvc().AddNToastNotifyToastr(new NToastNotify.ToastrOptions()
     PreventDuplicates = true,
     CloseButton = true,
 });
+
+builder.Services.AddSignalR();
 
 //builder.Services.AddDbContextFactory<BuyUIdentityContext>(options => options.UseSqlServer(
 //    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
@@ -60,5 +63,6 @@ app.MapControllerRoute(
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
 app.MapRazorPages();
+app.MapHub<ChatHub>("/chatHub");
 
 app.Run();
