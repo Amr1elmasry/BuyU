@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
+    <Folder Include="Project Images\" />
   </ItemGroup>
 
 </Project>
