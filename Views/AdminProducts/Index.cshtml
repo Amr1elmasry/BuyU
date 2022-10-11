@@ -15,7 +15,7 @@
     </p>
     <div class="row">
         <form asp-action="Index" method="POST" class="input-group">
-            <input class="form-control" type="text" id="sKey" name="searchKey" value=@ViewBag.Skey />
+            <input class="form-control" type="text" id="sKey" name="searchKey" placeholder="Search for Product or brand" value=@ViewBag.Skey />
                 <div class="input-group-btn">
                     <button type="submit" class="btn btn-primary" onclick="myFunction()">
                         <i class="bi bi-check"></i>

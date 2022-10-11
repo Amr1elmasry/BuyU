@@ -1,5 +1,5 @@
-﻿@model IEnumerable<BuyU.Models.Product>
-
+﻿@using BuyU.Controllers
+@model PaginatedList<Product>
 @{
     ViewData["Title"] = "BuyU";
 }
@@ -10,23 +10,56 @@
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
 </head>
-<body>
-
-    <div class="row">
-        <form asp-action="Index" method="POST" class="input-group">
-            <input class="form-control" type="text" id="sKey" name="searchKey" placeholder="Search for Product or brand" value=@ViewBag.Skey />
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-primary" onclick="myFunction()">
-                    <i class="bi bi-check"></i>
-                    Search
-                </button>
-                <a asp-action="Index" class=" btn btn-outline-secondary">
-                    <i class="bi bi-cancel"></i>
-                    Cancel
+<body onload="checkFilters()">
+    <form id="Filters" name="Filters" asp-action="Index" method="get" class="input-group">
+        <div class="col-1">
+            <div class="dropdown">
+                <a class="btn btn-secondary dropdown-toggle" href="#" id="sorts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Sort By
                 </a>
+
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PriceHighTolow" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]">Price High To Low</a></li>
+                    <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PricelowToHigh" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]">Price low To High</a></li>
+                </ul>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div class="col-8 ">
+            <input class="col form-control " type="text" id="sKey" asp-route-searchKey="searchKey" name="searchKey" placeholder="Search for Product or brand" value=@ViewBag.Skey />
+                <div class=" col " style="text-align:end;">
+                        
+            
+            </div>
+            <div class="row">
+                <div class="col-8 ms-1 me-1 input-group-btn">
+                    @foreach (var brand in @ViewBag.brandsName)
+                    {
+                    
+                            @*<input type="radio" style="width:100%;" class="btn btn-primary" asp-route-category="@brand" id="@brand">*@
+                        <input type="radio" class="radio" id=@brand name="category" value="@brand">
+                            <label for="@brand">@brand</label>
+                    
+                    }
+                </div>
+                <div class="col-8 ms-1 me-1 input-group-btn">
+                    @*<input type="radio" class="radio" id="PriceHighTolow" name="sorts" value="Price High To Low" />*@
+                    
+                </div>
+                <div class="input-group-btn d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary m-2">
+                        Search
+                    </button>
+                    <a asp-action="Index" class=" btn btn-outline-secondary  m-2">
+                        Cancel
+                    </a>
+                </div>
+                
+                
+                
+            </div>
+        </div>
+    </form>
     <div class="row mt-3">
 
         @if (!Model.Any())
@@ -74,9 +107,53 @@
             </div>
         }
     </div>
-
+    @{
+        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+    }
+    <div class="pagination justify-content-center m-3">
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex - 1)"
+           asp-route-searchKey="@ViewData["searchKey"]"
+           asp-route-category="@ViewData["category"]"
+           class="btn btn-default page-link m-2  @prevDisabled">
+            Previous 
+        </a>
+        <a asp-action="Index"
+           asp-route-sortOrder="@ViewData["CurrentSort"]"
+           asp-route-pageNumber="@(Model.PageIndex + 1)"
+           asp-route-searchKey="@ViewData["searchKey"]"
+           asp-route-category="@ViewData["category"]"
+           class="btn btn-default page-link m-2 @nextDisabled">
+            Next
+        </a>
+    </div>
 </body>
 </html>
+@section Scripts 
+{
 
+    <script>
+        function checkFilters() {
+
+            try{
+                temp = @ViewBag.category
+                if (@ViewBag.category!= null) {
+                    cat = @ViewBag.category
+                        //document.forms["Filters"][cat].checked = true;
+                        //document.Filters.category.value = @ViewBag.category;
+                        //console.log("test");
+                        //document.getElementById(cat).checked = true
+                        cat.checked = true;
+                }
+            }
+            catch(err) {}
+            
+                   
+        }
+        
+    </script>
+}
 
 

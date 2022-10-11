@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/BuyU.styles.css" asp-append-version="true" />
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
-    
+    <link href="~/lib/datatables/css/datatables.bootstrap.min.css" rel="stylesheet" />
 </head>
 <body>
     <header>
@@ -70,10 +70,11 @@
         
     </footer>
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="e:\studying\dotnet\buyu project\buyu\wwwroot\lib\jquery-validate\jquery.validate.min.js"></script>
-    <script src="e:\studying\dotnet\buyu project\buyu\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
+    <script src="~/lib/datatables/js/jquery.datatables.min.js"></script>
+    
+    
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("NToastNotify")

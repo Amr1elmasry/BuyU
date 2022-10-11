@@ -34,3 +34,9 @@ body {
     width: 40px;
     object-fit: fill;
 }
+
+
+.scroll {
+    height: 150px;
+    overflow-y: scroll;
+}
