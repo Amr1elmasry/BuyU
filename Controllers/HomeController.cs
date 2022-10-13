@@ -70,13 +70,15 @@ namespace BuyU.Controllers
         //}
 
         public async Task<IActionResult> Index(string sortOrder,
-                string currentFilter,
+                int pageSize,
                 string searchString,
                 int? pageNumber,string? searchKey , string? category )
         {
             ViewData["searchKey"] = searchKey;
             ViewData["CurrentSort"] = sortOrder;
             ViewData["category"] = category;
+            ViewData["pageSize"] = pageSize != 0 ? pageSize : 8; ;
+            ViewData["countOfprod"] = _context.Products.AsQueryable().Count();
             ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
             if (searchString != null)
             {
@@ -84,7 +86,7 @@ namespace BuyU.Controllers
             }
             else
             {
-                searchString = currentFilter;
+                searchString = searchKey;
             }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -121,7 +123,7 @@ namespace BuyU.Controllers
                     result = result;
                     break;
             }
-            int pageSize = 8;
+            pageSize = pageSize != 0 ? pageSize : 8;
             return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }

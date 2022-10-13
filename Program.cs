@@ -65,6 +65,12 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+//app.MapControllerRoute(
+//name: "default",
+//    pattern: "{controller=Home}/{action=Index}/{pageSize}");
+
+
+app.MapControllers();
 
 app.MapRazorPages();
 app.MapHub<ChatHub>("/chatHub");
