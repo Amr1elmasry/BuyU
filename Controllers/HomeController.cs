@@ -72,13 +72,15 @@ namespace BuyU.Controllers
         public async Task<IActionResult> Index(string sortOrder,
                 int pageSize,
                 string searchString,
+                int?min , int?max,
                 int? pageNumber,string? searchKey , string? category )
         {
             ViewData["searchKey"] = searchKey;
             ViewData["CurrentSort"] = sortOrder;
             ViewData["category"] = category;
+            ViewData["min"] = min;
+            ViewData["max"] = max;
             ViewData["pageSize"] = pageSize != 0 ? pageSize : 8; ;
-            ViewData["countOfprod"] = _context.Products.AsQueryable().Count();
             ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
             if (searchString != null)
             {
@@ -98,10 +100,12 @@ namespace BuyU.Controllers
             }
             ViewData["Skey"] = searchKey;
             ViewData["category"] = category;
-
+            
             var result = Enumerable.Empty<Product>().AsQueryable();
             var buyUContext = _context.Products.Include(p => p.Brand).Include(c=>c.Carts);
             result = buyUContext.Where(p => true);
+            //ViewData["maxPrice"] = result.Max(p => p.Price);
+            //ViewData["minPrice"] = result.Min(p => p.Price);
             if (searchKey != null && category == null)
                  result =  buyUContext.Where(s => s.Name.Contains(searchKey));
                 //return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
@@ -120,9 +124,16 @@ namespace BuyU.Controllers
                     break;
                 
                 default:
-                    result = result;
                     break;
             }
+            if (min!=null&&max==null)
+                result = result.Where(p => p.Price >= min);
+            else if (max!=null && min == null)
+                result = result.Where(p => p.Price <= max);
+            else if (min!=null && max!=null)
+                result=result.Where(p => p.Price >= min && p.Price <=max);
+            ViewData["countOfprod"] = result.Count();
+            
             pageSize = pageSize != 0 ? pageSize : 8;
             return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
 

@@ -15,7 +15,7 @@
         <form id="Filters" name="Filters" asp-action="Index" method="get" class="input-group d-flex ">
             <div class="row w-100 ">
                 @{
-                    var count = @ViewBag.pageSize == 0 ? "Items count" : @ViewBag.pageSize;
+                    var count = $"Items count =  {@ViewBag.pageSize}";
                 }
                 <div class="col-2 ">
                     <div class="dropdown">
@@ -29,6 +29,13 @@
                             <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="16">16</a>
 
                         </ul>
+                    </div>
+                    <div class="input-group-btn mt-3">
+
+                        <input style="width:auto; height:80%" type="number" value="@ViewBag.min" name="min" min="10" max="100000" placeholder="Min Price">
+                        <br />
+                        <input style="width:auto; height:80% ; margin-top:3px" value="@ViewBag.max" type="number" name="max" min="10" max="100000" placeholder="Max Price">
+                        
                     </div>
                 </div>
 
@@ -52,7 +59,7 @@
                                 Search
                             </button>
                             <a asp-action="Index" class=" btn btn-outline-secondary  m-2">
-                                Cancel
+                                Reset
                             </a>
                         </div>
                     </div>
@@ -90,14 +97,18 @@
         @foreach (var item in Model)
         {
             string con;
-            <div class="col-3 ">
-                <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+            <div class="col-3  ">
+                <div class="card text-center mr-5 mb-3" style="width: 18rem; height:20rem;">
                     <div class=" img-fluid text-center ">
                         <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
                     </div>
                     <div class="card-body justify-content-between">
-                        <h5 class="card-title h-25 ">@item.Name</h5>
+                        <h5 class="card-title  ">@item.Name</h5>
                         <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
+                        <div class="card-text">
+                            <p class="pricecard">@item.Price</p>
+                        </div>
+                        
                         <div class="col-md-13 ">
                             
                             @if (User.IsInRole("Admin"))
@@ -137,10 +148,13 @@
            asp-route-searchKey="@ViewData["searchKey"]"
            asp-route-category="@ViewData["category"]"
            asp-route-pageSize="@ViewData["pageSize"]"
+           asp-route-min="@ViewData["min"]"
+           asp-route-max="@ViewData["max"]"
            class="btn btn-default page-link m-2  @prevDisabled">
             Previous 
         </a>
-        @{int size =0;}
+        @{int size =0;
+            int temp = 1;}
         @if (@ViewBag.pageSize == 0)
         {
             size = 8;
@@ -149,7 +163,18 @@
         {
             size = @ViewBag.pageSize;
         }
-        @for (int i = 1; i <= (ViewBag.countOfprod / size) + 1; i++)
+        @{
+            if (ViewBag.countOfprod % size ==0)
+            {
+                temp = ViewBag.countOfprod / size;
+            }
+            else
+            {
+                temp = (ViewBag.countOfprod / size) + 1;
+            }
+        }
+            
+        @for (int i = 1; i <= temp; i++)
         {
             currPage = (i == Model.PageIndex) ? " btn btn-primary  page-link m-2 disabled " : " btn btn-default page-link m-2 ";
             <a asp-action="Index"
@@ -158,6 +183,8 @@
            asp-route-searchKey="@ViewData["searchKey"]"
            asp-route-category="@ViewData["category"]"
            asp-route-pageSize="@ViewData["pageSize"]"
+           asp-route-min="@ViewData["min"]"
+           asp-route-max="@ViewData["max"]"
            class="@currPage" >
             @i
         </a>
@@ -170,6 +197,8 @@
            asp-route-searchKey="@ViewData["searchKey"]"
            asp-route-category="@ViewData["category"]"
            asp-route-pageSize="@ViewData["pageSize"]"
+           asp-route-min="@ViewData["min"]"
+           asp-route-max="@ViewData["max"]"
            class="btn btn-default page-link m-2 @nextDisabled">
             Next
         </a>

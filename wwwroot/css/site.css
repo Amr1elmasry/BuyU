@@ -40,3 +40,13 @@ body {
     height: 150px;
     overflow-y: scroll;
 }
+
+
+.pricecard {
+    color: black;
+    font-size: larger;
+    border: solid;
+    border-color: black;
+    border-block: groove;
+    background-color: cornsilk;
+}
