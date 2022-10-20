@@ -1,0 +1,97 @@
+﻿@*@model IEnumerable<BuyU.ModelsProduct>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Cart </title>
+</head>
+<body>
+    <h1 class="badge bg-secondary fs-6 mb-4">
+        Cart Of @ViewBag.userName
+    </h1>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="text-center mt-5" >
+                <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
+            </div>
+        }
+
+                    
+        <form asp-action="CartProducts" method="post">
+            @foreach (var item in Model)
+            {
+                <div class="col-3" id="cardpro">
+                    <input asp-for="ProductId" value="@item.ProductId" type="hidden">
+                    <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                        <div class=" img-fluid text-center ">
+                            <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
+                        </div>
+                        <div class="card-body justify-content-between">
+                            <h5 class="card-title h-25 ">@item.Name</h5>
+                            <div class="card-text">
+                                <p class="pricecard">@item.Price</p>
+                            </div>
+                        </div>
+                        <div class=" card-footer ">
+                            <div class="row row-cols-auto">
+                                <input asp-for="Quantity" class="col m-1 " style="width:20%; height:80%" type="number" id="qty" value=@item.Carts.First().Qty min="1" max="10">
+                                <a class="col btn btn-primary btn-sm m-1" asp-controller="UserProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                                <a asp-action="RemoveProduct" class="col m-1 btn btn-danger btn-sm " asp-route-id="@item.ProductId">Remove From Cart</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+                    <div class="row mt-3">
+                        <div class="d-grid gap-2 col-3 mx-auto">
+                            <button type="submit" class="btn btn-primary m-2">
+                                Accept Order
+                            </button>
+                        </div>
+                    </div>
+            
+        </form>
+            
+                
+        
+                    <div class="d-flex justify-content-center mt-3">
+                        <span class="p-3 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
+                            Total Price Is : @ViewBag.TotalPrice
+                        </span>
+                    </div>
+        
+            
+        
+    </div>
+    
+
+</body>
+</html>*@
+
+@*@section Scripts {
+    <script>
+        $(document).ready(function () {
+            var btn = $(this);
+            console.log(btn);
+            $('.js-delete').on('click', function () {
+                $.ajax({
+                    url: '/cart/removeproduct?id=' + $(this).data('id'),
+                    success: function () {
+
+                        $(this).parents('.col-3').fadeOut(1000 , function () {
+                            $(this).remove();
+                        });
+                        toastr.success('Product Removed successfully');
+                    },
+                    error: function () {
+                        toastr.error('Something went wrong');
+                    }
+                }
+                )}
+                )
+        })
+    </script>
+}*@

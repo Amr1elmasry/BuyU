@@ -4,6 +4,7 @@ using BuyU.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuyU.Migrations
 {
     [DbContext(typeof(BuyUContext))]
-    partial class BuyUContextModelSnapshot : ModelSnapshot
+    [Migration("20221016072637_renameQuantityInCart")]
+    partial class renameQuantityInCart
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -32,9 +34,6 @@ namespace BuyU.Migrations
 
                     b.Property<string>("Address")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("CartId")
-                        .HasColumnType("int");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -142,41 +141,26 @@ namespace BuyU.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CartId"), 1L, 1);
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("CartId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique();
-
-                    b.ToTable("Carts");
-                });
-
-            modelBuilder.Entity("BuyU.Models.CartProduct", b =>
-                {
-                    b.Property<int>("CartId")
-                        .HasColumnType("int");
-
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasDefaultValue(1);
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime>("dateTime")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 10, 20, 15, 49, 35, 781, DateTimeKind.Local).AddTicks(2929));
+                        .HasColumnType("datetime2");
 
-                    b.HasKey("CartId", "ProductId");
+                    b.HasKey("CartId");
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartProduct");
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Carts");
                 });
 
             modelBuilder.Entity("BuyU.Models.Order", b =>
@@ -187,24 +171,7 @@ namespace BuyU.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasMaxLength(265)
-                        .HasColumnType("nvarchar(265)");
-
-                    b.Property<string>("PhoneNumber")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<double?>("TotalPrice")
+                    b.Property<double>("TotalPrice")
                         .HasColumnType("float");
 
                     b.Property<string>("UserId")
@@ -423,55 +390,29 @@ namespace BuyU.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("productsProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersOrderId", "productsProductId");
-
-                    b.HasIndex("productsProductId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("BuyU.Models.Cart", b =>
                 {
-                    b.HasOne("BuyU.Models.ApplicationUser", "User")
-                        .WithOne("Cart")
-                        .HasForeignKey("BuyU.Models.Cart", "UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
-                });
-
-            modelBuilder.Entity("BuyU.Models.CartProduct", b =>
-                {
-                    b.HasOne("BuyU.Models.Cart", "Cart")
-                        .WithMany("CartProduct")
-                        .HasForeignKey("CartId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("BuyU.Models.Product", "Product")
-                        .WithMany("CartProduct")
+                        .WithMany("Carts")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Cart");
+                    b.HasOne("BuyU.Models.ApplicationUser", "User")
+                        .WithMany("Carts")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Product");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("BuyU.Models.Order", b =>
                 {
                     b.HasOne("BuyU.Models.ApplicationUser", "User")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -560,37 +501,14 @@ namespace BuyU.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("BuyU.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BuyU.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("productsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BuyU.Models.ApplicationUser", b =>
                 {
-                    b.Navigation("Cart")
-                        .IsRequired();
-
-                    b.Navigation("Orders");
+                    b.Navigation("Carts");
                 });
 
             modelBuilder.Entity("BuyU.Models.Brand", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("BuyU.Models.Cart", b =>
-                {
-                    b.Navigation("CartProduct");
                 });
 
             modelBuilder.Entity("BuyU.Models.Order", b =>
@@ -600,7 +518,7 @@ namespace BuyU.Migrations
 
             modelBuilder.Entity("BuyU.Models.Product", b =>
                 {
-                    b.Navigation("CartProduct");
+                    b.Navigation("Carts");
 
                     b.Navigation("OrderDetails");
                 });

@@ -4,6 +4,7 @@ using BuyU.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuyU.Migrations
 {
     [DbContext(typeof(BuyUContext))]
-    partial class BuyUContextModelSnapshot : ModelSnapshot
+    [Migration("20221019164338_EditOrderTable")]
+    partial class EditOrderTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,7 +172,7 @@ namespace BuyU.Migrations
                     b.Property<DateTime>("dateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 10, 20, 15, 49, 35, 781, DateTimeKind.Local).AddTicks(2929));
+                        .HasDefaultValue(new DateTime(2022, 10, 19, 18, 43, 38, 555, DateTimeKind.Local).AddTicks(8720));
 
                     b.HasKey("CartId", "ProductId");
 
@@ -188,20 +190,16 @@ namespace BuyU.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OrderId"), 1L, 1);
 
                     b.Property<string>("Address")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasMaxLength(265)
                         .HasColumnType("nvarchar(265)");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("TotalPrice")
@@ -423,21 +421,6 @@ namespace BuyU.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.Property<int>("OrdersOrderId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("productsProductId")
-                        .HasColumnType("int");
-
-                    b.HasKey("OrdersOrderId", "productsProductId");
-
-                    b.HasIndex("productsProductId");
-
-                    b.ToTable("OrderProduct");
-                });
-
             modelBuilder.Entity("BuyU.Models.Cart", b =>
                 {
                     b.HasOne("BuyU.Models.ApplicationUser", "User")
@@ -471,7 +454,7 @@ namespace BuyU.Migrations
             modelBuilder.Entity("BuyU.Models.Order", b =>
                 {
                     b.HasOne("BuyU.Models.ApplicationUser", "User")
-                        .WithMany("Orders")
+                        .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -560,27 +543,10 @@ namespace BuyU.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("OrderProduct", b =>
-                {
-                    b.HasOne("BuyU.Models.Order", null)
-                        .WithMany()
-                        .HasForeignKey("OrdersOrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("BuyU.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("productsProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("BuyU.Models.ApplicationUser", b =>
                 {
                     b.Navigation("Cart")
                         .IsRequired();
-
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("BuyU.Models.Brand", b =>

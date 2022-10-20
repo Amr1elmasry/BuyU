@@ -5,14 +5,19 @@ using BuyUContext = BuyU.Models.BuyUContext;
 using NToastNotify;
 using BuyU.Controllers;
 using BuyU.Hubs;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("BuyUContextConnection") ?? throw new InvalidOperationException("Connection string 'BuyUContextConnection' not found.");
 
 // Add services to the container.
 builder.Services.AddControllersWithViews();
-builder.Services.AddDbContextFactory<BuyUContext>(options => options.UseSqlServer(
-    connectionString),ServiceLifetime.Transient);
+builder.Services.AddDbContext<BuyUContext>(options =>
+{
+    options.UseSqlServer(connectionString);
+    
+
+    });
 
 
 builder.Services.AddMvc().AddNToastNotifyToastr(new NToastNotify.ToastrOptions()
@@ -29,12 +34,8 @@ builder.Services.AddSignalR();
 //    "Data Source=.;Initial Catalog=BuyU;Integrated Security=true;MultipleActiveResultsets=true;"
 //   ),
 //    ServiceLifetime.Transient
-//);
+//); 
 
-builder.Services.AddControllersWithViews()
-    .AddNewtonsoftJson(options =>
-    options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
-);
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>()
     .AddEntityFrameworkStores<BuyUContext>()

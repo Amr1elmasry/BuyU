@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -31,6 +32,11 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="UserCart" asp-action="CartProducts">Cart</a>
                         </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="UserOrder" asp-action="MyOrders">MyOrders</a>
+                        </li>
+                        
+
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
@@ -52,6 +58,8 @@
                                 <a class="nav-link text-dark" asp-controller="Home" asp-action="ChatWithAdmin">Chat With Admin</a>
                             </li>
                         }
+                        
+                        
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

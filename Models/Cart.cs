@@ -13,13 +13,12 @@ namespace BuyU.Models
 
         [Key("CartId")]
         public int CartId { get; set; }
-        public string UserId { get; set; }
-
-        [DefaultValue(1)]
-        public int  Qty { get; set; }
 
         [ForeignKey("UserId")]
-        public ApplicationUser User { get; set; } 
-        public ICollection<Product> Products { get; set; }
+        public string UserId { get; set; }
+        public ApplicationUser? User { get; set; }
+
+        public ICollection<Product>? Products { get; set; }
+        public List<CartProduct>? CartProduct { get; set; }
     }
 }

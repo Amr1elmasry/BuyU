@@ -1,0 +1,68 @@
+﻿@*@model List<BuyU.Models.Cart>
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Cart </title>
+</head>
+<body>
+    <h1 class="badge bg-secondary fs-6 mb-4">
+        Cart Of @ViewBag.userName
+    </h1>
+    <div class="row">
+        @if (!Model.Any())
+        {
+            <div class="text-center mt-5">
+                <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
+            </div>
+        }
+        <form asp-action="CartProducts" asp-controller="UserCart" method="post" class="input-group d-flex ">
+            @foreach (var item in Model)
+                {
+                        <div class="col-3" id="cardpro">
+                            <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                                <div class=" img-fluid text-center ">
+                            <img class="card-img-top" style="width:100px; height:120px;" src="@item.Product.Photo" alt="@item.Product.Name">
+                                </div>
+                                <div class="card-body justify-content-between">
+                            <h5 class="card-title h-25 ">@item.Product.Name</h5>
+                                    <div class="card-text">
+                                <p class="pricecard">@item.Product.Price</p>
+                                    </div>
+                                </div>
+                                <div class=" card-footer ">
+                                    <div class="row row-cols-auto">
+                                        @Html.EditorFor(t => item.Quantity)
+                                        <a class="col btn btn-primary btn-sm m-1" asp-controller="UserProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                                        <a asp-action="RemoveProduct" class="col m-1 btn btn-danger btn-sm " asp-route-id="@item.ProductId">Remove From Cart</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    
+                }
+            <div class="row mt-3">
+                <div class="d-grid gap-2 col-3 mx-auto">
+                    <button type="submit">Save</button>
+                        
+
+                </div>
+            </div>
+        </form>
+                        
+        <div class="d-flex justify-content-center mt-3">
+            <span class="p-3 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
+                Total Price Is : @ViewBag.TotalPrice
+            </span>
+        </div>
+        
+
+
+
+    </div>
+
+
+</body>
+</html>*@

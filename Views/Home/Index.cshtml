@@ -40,13 +40,12 @@
                 </div>
 
                 <div class="col-8 ">
-                    <input class="col form-control " type="text" id="sKey" asp-route-searchKey="searchKey" name="searchKey" placeholder="Search for Product or brand" value=@ViewBag.Skey />
+                    <input class="col form-control " type="text" id="sKey" asp-route-searchKey="searchKey" name="searchKey" placeholder="Search for product or brand" value=@ViewBag.Skey />
                     <div class="row justify-content-center">
                         <div class="col align-self-center input-group-btn">
                             @foreach (var brand in @ViewBag.brandsName)
                             {
 
-                                @*<input type="radio" style="width:100%;" class="btn btn-primary" asp-route-category="@brand" id="@brand">*@
                                 <input type="radio" class="radio" id=@brand name="category" value="@brand">
                                 <label for="@brand">@brand</label>
 
@@ -123,9 +122,9 @@
                             <div class=" card-footer ">
                                 <a class="btn btn-outline-secondary btn-sm mb-3" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
 
-                                @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user && p.Products.Any(p => p.ProductId == item.ProductId)))
+                                @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user)) 
                                 {
-                                    <a class="btn btn-primary btn-sm mb-3" asp-controller="UserCart" asp-action="AddToCart" asp-route-id="@item.ProductId" onclick="window.location.href='location'">Add To Cart</a>
+                                    <a class="btn btn-primary btn-sm mb-3" asp-controller="UserCart" asp-action="AddToCart" asp-route-id="@item.ProductId" asp-route-Name="@item.Name" onclick="window.location.href='location'">Add To Cart</a>
                                 }
                             </div>
 
