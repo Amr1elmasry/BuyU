@@ -8,11 +8,29 @@
     <title>Cart </title>
 </head>
 <body>
-    <h1 class="badge bg-secondary fs-6 mb-4">
-        Cart Of @ViewBag.userName
-    </h1>
+    @{
+        var check = Model.cartProducts == null || Model.cartProducts.Count() == 0;
+    }
+    <div class="d-flex justify-content-between">
+        <h1 class="badge bg-secondary fs-6 mb-4">
+            Cart Of @ViewBag.userName
+        </h1>
+        @if(check)
+        {
+            <button href="javascript:;" disabled class="btn btn-danger js-delete h-25">
+            Delete All Products In Cart
+            </button>
+        }
+        else{
+            <button href="javascript:;" class="btn btn-danger js-delete h-25">
+                Delete All Products In Cart
+            </button>
+        }
+        
+    </div>
+    
 
-    @if (Model.cartProducts == null || Model.cartProducts.Count() == 0 )
+    @if (check)
         {
             <div class="text-center mt-5">
                 <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
@@ -71,3 +89,43 @@
         
 </body>
 </html>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('.js-delete').on('click', function () {
+                var btn = $(this);
+
+                bootbox.confirm({
+                    message: "Are you sure that you want to delete this movie?",
+                    buttons: {
+                        confirm: {
+                            label: 'Yes',
+                            className: 'btn-danger'
+                        },
+                        cancel: {
+                            label: 'No',
+                            className: 'btn-outline-secondary'
+                        }
+                    },
+                    callback: function (result) {
+                        if (result) {
+                            $.ajax({
+                                url: '/Cart/EmptyCart/',
+                                success: function () {
+                                    toastr.success('All Products are removed successfully');
+                                    location.reload()
+                                },
+                                error: function () {
+                                    toastr.error('Something went wrong');
+                                }
+                            })
+                        }
+                    }
+                });
+
+
+            })
+        })
+    </script>
+}

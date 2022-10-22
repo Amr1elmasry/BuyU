@@ -124,7 +124,17 @@
 
                                 @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user)) 
                                 {
-                                    <a class="btn btn-primary btn-sm mb-3" asp-controller="UserCart" asp-action="AddToCart" asp-route-id="@item.ProductId" asp-route-Name="@item.Name" onclick="window.location.href='location'">Add To Cart</a>
+                                    var id = $"AddButton{item.ProductId}";
+                                    <button id=@id class="btn btn-primary btn-sm mb-3 js-add" href="javascript:;" data-id=@item.ProductId>
+                                        Add To Cart
+                                    </button>
+                                    
+                                }
+                                else
+                                {
+                                    <button id="AddButton @item.ProductId" class="btn btn-primary btn-sm mb-3 js-add" href="javascript:;" disabled data-id=@item.ProductId>
+                                        In Your Cart
+                                    </button>
                                 }
                             </div>
 
@@ -206,7 +216,29 @@
 </html>
 @section Scripts 
 {
+    <script>
+        $(document).ready(function () {
+            $('.js-add').on('click', function () {
+                var btn = $(this);
+                var id = btn.data('id');
+                $.ajax({
+                    
+                    url: '/Cart/AddToCart?id=' + id,
+                    success: function () {
+                       
+                        btn.addClass('disabled');
+                        document.getElementById('AddButton'+id).innerHTML = "In Your Cart";
+                        toastr.success('Product added successfully');
+                       
+                    },
+                    error: function () {
+                        toastr.error('Something went wrong');
+                    }
+                })
 
+            })
+        })
+    </script>
     <script>
         function checkFilters() {
 
@@ -226,7 +258,7 @@
         }
         
     </script>
-    
+
 }
 
 
