@@ -10,6 +10,9 @@
     <link rel="stylesheet" href="~/BuyU.styles.css" asp-append-version="true" />
     <link href="~/lib/animate.css/animate.min.css" rel="stylesheet" />
     <link href="~/lib/datatables/css/datatables.bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" />
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    
 </head>
 <body>
     <header>
@@ -79,8 +82,6 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/bootbox.js/bootbox.min.js"></script>
     <script src="~/lib/datatables/js/jquery.datatables.min.js"></script>
-    
-    
     <script src="~/js/site.js" asp-append-version="true"></script>
     @await RenderSectionAsync("Scripts", required: false)
     @await Component.InvokeAsync("NToastNotify")

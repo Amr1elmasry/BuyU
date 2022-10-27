@@ -1,11 +1,12 @@
-﻿using BuyU.Models;
+﻿using BuyU.Classes;
+using BuyU.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 using System.Diagnostics;
 using System.Linq;
-
 namespace BuyU.Controllers
 {
 
@@ -14,66 +15,21 @@ namespace BuyU.Controllers
         private readonly BuyUContext _context;
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
-        public HomeController(ILogger<HomeController> logger, BuyUContext context , UserManager<ApplicationUser> userManager )
+        private readonly IToastNotification _toastNotification;
+        public HomeController(ILogger<HomeController> logger, BuyUContext context , UserManager<ApplicationUser> userManager, IToastNotification toastNotification )
         {
             _userManager = userManager;
+            _toastNotification = toastNotification;
             _logger = logger;
             _context = context;
     
         }
 
-
-        // GET: UserProductsController
-        //public async Task<IActionResult> Index(string sortOrder,
-        //        string currentFilter,
-        //        string searchString,
-        //        int? pageNumber)
-        //{
-        //    ViewData["CurrentSort"] = sortOrder;
-        //    ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
-        //    if (searchString != null)
-        //    {
-        //        pageNumber = 1;
-        //    }
-        //    else
-        //    {
-        //        searchString = currentFilter;
-        //    }
-
-        //    var user = await _userManager.GetUserAsync(User);
-        //    if (user == null)
-        //        ViewData["user"] = string.Empty;
-        //    else
-        //    {
-        //        var userId = (await _userManager.GetUserIdAsync(user));
-        //        ViewData["user"] = userId;
-        //    }
-        //    var result = Enumerable.Empty<Product>().AsQueryable();
-        //    var buyUContext = _context.Products.Include(p => p.Brand).Include(c=>c.Carts);
-        //    result = buyUContext.Where(p => true);    
-        //    switch (sortOrder)
-        //    {
-        //        case "PriceHighTolow":
-        //            result = result.OrderByDescending(p => p.Price);
-        //            break;
-        //        case "PricelowToHigh":
-        //            result = result.OrderBy(p => p.Price);
-        //            break;
-
-        //        default:
-        //            result = result;
-        //            break;
-        //    }
-        //    int pageSize = 8;
-        //    return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
-
-        //}
-
         public async Task<IActionResult> Index(string sortOrder,
                 int pageSize,
                 string searchString,
-                int?min , int?max,
-                int? pageNumber,string? searchKey , string? category )
+                int? min, int? max,
+                int? pageNumber, string? searchKey, string? category)
         {
             ViewData["searchKey"] = searchKey;
             ViewData["CurrentSort"] = sortOrder;
@@ -100,19 +56,19 @@ namespace BuyU.Controllers
             }
             ViewData["Skey"] = searchKey;
             ViewData["category"] = category;
-            
+
             var result = Enumerable.Empty<Product>().AsQueryable();
-            var buyUContext = _context.Products.Include(p => p.Brand).Include(c=>c.Carts);
+            var buyUContext = _context.Products.Include(p => p.Brand).Include(c => c.Carts);
             result = buyUContext.Where(p => true);
             //ViewData["maxPrice"] = result.Max(p => p.Price);
             //ViewData["minPrice"] = result.Min(p => p.Price);
             if (searchKey != null && category == null)
-                 result =  buyUContext.Where(s => s.Name.Contains(searchKey));
-                //return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
-            else if (category!= null && searchKey==null)
-                result =  buyUContext.Where(s => s.Brand.BrandName == category);
-            else if (category!= null & searchKey!=null)
-                result =  buyUContext.Where(s => s.Brand.BrandName == category && s.Name.Contains((string)searchKey));
+                result = buyUContext.Where(s => s.Name.Contains(searchKey));
+            //return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
+            else if (category != null && searchKey == null)
+                result = buyUContext.Where(s => s.Brand.BrandName == category);
+            else if (category != null & searchKey != null)
+                result = buyUContext.Where(s => s.Brand.BrandName == category && s.Name.Contains((string)searchKey));
 
             switch (sortOrder)
             {
@@ -122,19 +78,23 @@ namespace BuyU.Controllers
                 case "PricelowToHigh":
                     result = result.OrderBy(p => p.Price);
                     break;
-                
+
                 default:
                     break;
             }
-            if (min!=null&&max==null)
+            if (min != null && max == null)
                 result = result.Where(p => p.Price >= min);
-            else if (max!=null && min == null)
+            else if (max != null && min == null)
                 result = result.Where(p => p.Price <= max);
-            else if (min!=null && max!=null)
-                result=result.Where(p => p.Price >= min && p.Price <=max);
+            else if (min != null && max != null)
+                result = result.Where(p => p.Price >= min && p.Price <= max);
             ViewData["countOfprod"] = result.Count();
-            
+
             pageSize = pageSize != 0 ? pageSize : 8;
+            if (TempData["error"] as string == "true")
+            {
+                _toastNotification.AddAlertToastMessage("You already have this product");
+            }
             return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }

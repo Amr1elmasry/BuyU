@@ -1,4 +1,5 @@
-﻿using BuyU.Models;
+﻿using BuyU.Controllers.Api;
+using BuyU.Models;
 using BuyU.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -16,10 +17,12 @@ namespace BuyU.Controllers
     {
         private readonly BuyUContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IToastNotification _toastNotification;
-        public UserCartController(BuyUContext buyUContext, UserManager<ApplicationUser> userManager, IToastNotification toastNotification)
+        public UserCartController(BuyUContext buyUContext, UserManager<ApplicationUser> userManager, IToastNotification toastNotification , SignInManager<ApplicationUser> signInManager)
         {
             _userManager = userManager;
+            _signInManager = signInManager;
             _context = buyUContext;
             _toastNotification = toastNotification;
         }
@@ -54,17 +57,27 @@ namespace BuyU.Controllers
             return RedirectToAction("Order", "UserOrder");
         }
 
-
         public async Task<IActionResult> AddToCart(int id)
         {
+            
+            if (!User.Identity.IsAuthenticated)
+            {
+                return NotFound();
+            }
             var user = await CommonFunctions.UserIdAsync(_userManager, User);
-            var product = _context.Products.FirstOrDefault(p => p.ProductId == id);
+            var product = _context.Products.Include(c=>c.CartProduct).FirstOrDefault(p => p.ProductId == id);
             user = _context.Users.Include(c => c.Cart).SingleOrDefault(u=>u.Id==user.Id);
             if (user.CartId == null)
             {
                 var Newcart = new Cart { UserId = user.Id, User = user };
                 await _context.Carts.AddAsync(new Cart { UserId = user.Id, User = user});
                 await _context.SaveChangesAsync();
+            }
+            if (product.CartProduct.Any(p=>p.CartId==user.CartId))
+            {
+                TempData["error"] = "true";
+                return RedirectToAction("Index", "Home");
+
             }
             user.CartId = user.Cart.CartId;
             _context.Users.Update(user);

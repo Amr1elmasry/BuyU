@@ -71,8 +71,8 @@
     </div>
 
 
-    <div class="row  mt-3">
-        <div class=" col">
+    <div class="row w-75 d-flex  jus justify-content-between mt-3">
+        <div class=" col-6">
             <h2>Confirm Your Infromation</h2>
                 <div class="input-group mb-2">
                     <span class="input-group-text">Name</span>
@@ -107,17 +107,18 @@
                     </div>
                 </div>
         </div>
+        <div class="col-3 mt-4">
+            <div class="d-flex justify-content-center mt-5">
+                <span class="p-2 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
+                    Total Price Is : @Model.TotalPrice
+                
+                </span>
+            </div>
+        </div>
     </div>
 </form>
 
-    <div class="col-3">
-        <div class="d-flex justify-content-center mt-5">
-            <span class="p-3 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
-                Total Price Is : @Model.TotalPrice
-            
-            </span>
-        </div>
-    </div>
+    
 
 @section Scripts {
     @{

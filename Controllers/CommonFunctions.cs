@@ -14,5 +14,10 @@ namespace BuyU.Controllers
                 return (user);
             return (null);
         }
+        public static bool CheckSession(ClaimsPrincipal User)
+        {
+            return User.Identity.IsAuthenticated;
+        }
     }
+    
 }

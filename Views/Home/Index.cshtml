@@ -9,8 +9,10 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Index</title>
+        
 </head>
 <body onload="checkFilters()">
+    
     <div class="col">
         <form id="Filters" name="Filters" asp-action="Index" method="get" class="input-group d-flex ">
             <div class="row w-100 ">
@@ -132,7 +134,7 @@
                                 }
                                 else
                                 {
-                                    <button id="AddButton @item.ProductId" class="btn btn-primary btn-sm mb-3 js-add" href="javascript:;" disabled data-id=@item.ProductId>
+                                    <button id="AddButton @item.ProductId" class="btn btn-success btn-sm mb-3 js-add" href="javascript:;" disabled data-id=@item.ProductId>
                                         In Your Cart
                                     </button>
                                 }
@@ -221,20 +223,29 @@
             $('.js-add').on('click', function () {
                 var btn = $(this);
                 var id = btn.data('id');
-                $.ajax({
-                    
-                    url: '/Cart/AddToCart?id=' + id,
-                    success: function () {
-                       
-                        btn.addClass('disabled');
-                        document.getElementById('AddButton'+id).innerHTML = "In Your Cart";
-                        toastr.success('Product added successfully');
-                       
-                    },
-                    error: function () {
-                        toastr.error('Something went wrong');
-                    }
-                })
+                if (@User.Identity.IsAuthenticated.ToString().ToLower()) {
+                    $.ajax({
+
+                        url: '/Cart/AddToCart?id=' + id,
+                        success: function () {
+
+                            btn.addClass('disabled');
+                            btn.removeClass("btn btn-primary btn-sm mb-3 js-add")
+                            btn.addClass("btn btn-success btn-sm mb-3 js-add")
+                            document.getElementById('AddButton' + id).innerHTML = "In Your Cart";
+                            toastr.success('Product added successfully');
+
+                        },
+                        error: function () {
+                            toastr.error('Something went wrong');
+                        }
+                    })
+                }
+                else {
+
+                    location.replace('/Identity/Account/Login?ReturnUrl=%2FCart%2FAddToCart%3Fid%3D' + id);
+                }
+                
 
             })
         })
@@ -243,6 +254,7 @@
         function checkFilters() {
 
             try{
+                
                 temp = @ViewBag.category
                 if (@ViewBag.category!= null) {
                     cat = @ViewBag.category
@@ -254,11 +266,12 @@
             }
             catch(err) {}
             
+            
                    
         }
         
     </script>
-
+    
 }
 
 
