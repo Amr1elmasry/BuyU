@@ -2,7 +2,7 @@
 - Its Asp.net Core mvc with Identity and roles 
 - My main goal was to focus on Backend so i have used For Backend :
   1. asp.net Core V6
-  2. SqlServe
+  2. SqlServer
 - And for front :
   1. html
   2. css
