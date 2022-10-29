@@ -1,7 +1,9 @@
 ﻿using BuyU.Models;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using NToastNotify;
 
 namespace BuyU.Controllers
 {
@@ -9,10 +11,15 @@ namespace BuyU.Controllers
     public class UserProductsController : Controller
     {
         private readonly BuyUContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly IToastNotification _toastNotification;
+        
 
-        public UserProductsController(BuyUContext buyUContext)
+        public UserProductsController(BuyUContext buyUContext, UserManager<ApplicationUser> userManager , IToastNotification toastNotification)
         {
             _context = buyUContext;
+            _userManager = userManager;
+            _toastNotification = toastNotification;
         }
 
         // GET: UserProductsController
@@ -24,6 +31,7 @@ namespace BuyU.Controllers
         [HttpPost]
         public async Task<IActionResult> Index(string? searchKey)
         {
+
             ViewData["Skey"] = searchKey;
             var buyUContext = _context.Products.Include(p => p.Brand);
 
@@ -39,19 +47,30 @@ namespace BuyU.Controllers
         // GET: UserProductsController/Details/5
         public async Task<IActionResult> Details(int? id)
         {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                ViewData["user"] = string.Empty;
+            else
+            {
+                user = await CommonFunctions.UserIdAsync(_userManager, User);
+                ViewData["user"] = user.Id;
+            }
             if (id == null || _context.Products == null)
             {
                 return NotFound();
             }
 
             var product = await _context.Products
-                .Include(p => p.Brand)
+                .Include(p => p.Brand).Include(c=>c.Carts)
                 .FirstOrDefaultAsync(m => m.ProductId == id);
             if (product == null)
             {
                 return NotFound();
             }
-
+            if (TempData["error"] as string == "add")
+            {
+                _toastNotification.AddSuccessToastMessage("Product added successfully");
+            }
             return View(product);
         }
 

@@ -60,6 +60,12 @@ namespace BuyU.Models
             .HasOne(a => a.Cart)
             .WithOne(a => a.User)
             .HasForeignKey<Cart>(c => c.UserId);
+
+            modelBuilder.Entity<Order>()
+                .Property(s => s.Status)
+                .HasDefaultValue("Under review");
+
+                
         }
 
 

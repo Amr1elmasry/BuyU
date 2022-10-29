@@ -4,6 +4,7 @@ using BuyU.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BuyU.Migrations
 {
     [DbContext(typeof(BuyUContext))]
-    partial class BuyUContextModelSnapshot : ModelSnapshot
+    [Migration("20221027203513_removeStatusInOrder")]
+    partial class removeStatusInOrder
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,7 +172,7 @@ namespace BuyU.Migrations
                     b.Property<DateTime>("dateTime")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
-                        .HasDefaultValue(new DateTime(2022, 10, 27, 22, 48, 19, 367, DateTimeKind.Local).AddTicks(9059));
+                        .HasDefaultValue(new DateTime(2022, 10, 27, 22, 35, 13, 548, DateTimeKind.Local).AddTicks(87));
 
                     b.HasKey("CartId", "ProductId");
 
@@ -202,9 +204,6 @@ namespace BuyU.Migrations
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Status")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<double?>("TotalPrice")

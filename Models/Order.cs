@@ -21,7 +21,7 @@ namespace BuyU.Models
         public string? PhoneNumber { get; set; }
 
         [DefaultValue("Under review")]
-        public string? Status { get; set; } 
+        public string? Status { get; set; }
         public double? TotalPrice { get; set; }
 
         [Required]

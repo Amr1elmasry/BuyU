@@ -41,6 +41,26 @@ namespace BuyU.Controllers
             cartsViewModel.cartProducts = cart.CartProduct;
             return View(cartsViewModel);
         }
+        private string AddToCartValidation(int Productid , int ProductQty)
+        {
+            string massage = "success";
+            var product = _context.Products.Include(c=>c.CartProduct).FirstOrDefault(p => p.ProductId == Productid);
+
+            if (product != null)
+            {
+                if (ProductQty == 0) massage = "Quantity of product cannot be zero!";
+                else if (ProductQty < 0) massage = "Not eligible to add negative qty";
+                else if (product.Quantity == 0) massage = "This product is out of stock!";
+                else if (product.Quantity < ProductQty) massage = "The quantity of this product less than your request!";
+            }
+            else
+            {
+                massage = "Product is not found";
+            }
+            return massage;
+        }
+
+
         [HttpPost]
         public async Task<IActionResult> CartProductsAsync(CartsViewModel model)
         {
@@ -57,7 +77,7 @@ namespace BuyU.Controllers
             return RedirectToAction("Order", "UserOrder");
         }
 
-        public async Task<IActionResult> AddToCart(int id)
+        public async Task<IActionResult> AddToCart(string? ok , int id)
         {
             
             if (!User.Identity.IsAuthenticated)
@@ -73,20 +93,46 @@ namespace BuyU.Controllers
                 await _context.Carts.AddAsync(new Cart { UserId = user.Id, User = user});
                 await _context.SaveChangesAsync();
             }
-            if (product.CartProduct.Any(p=>p.CartId==user.CartId))
+            var check = AddToCartValidation(id, 1);
+            if (check == "success")
             {
-                TempData["error"] = "true";
-                return RedirectToAction("Index", "Home");
-
+                if (product.CartProduct.Any(p => p.CartId == user.CartId))
+                {
+                    TempData["error"] = "true";
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    _context.CartProduct.Add(new CartProduct { CartId = (int)user.CartId, ProductId = id, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
+                    user.CartId = user.Cart.CartId;
+                    _context.Users.Update(user);
+                    await _context.SaveChangesAsync();
+                    ViewData["userName"] = user.UserName;
+                    TempData["error"] = "add";
+                }
             }
-            user.CartId = user.Cart.CartId;
-            _context.Users.Update(user);
-            _context.CartProduct.Add(new CartProduct { CartId = (int)user.CartId, ProductId = id, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
-            await _context.SaveChangesAsync();
-            ViewData["userName"] = user.UserName;
-            //_toastNotification.AddSuccessToastMessage("Product added successfully");
+            else
+            {
+                
+                TempData["error"] = check;
+                return RedirectToAction("Index", "Home");
+            }
+            
+            
 
-            return Ok();
+            //_toastNotification.AddSuccessToastMessage("Product added successfully");
+            if (ok=="ok")
+            {
+                TempData["error"] = "add";
+                return RedirectToAction("Index", "Home");
+                
+            }
+            else if(ok=="det")
+            {
+                TempData["error"] = "add";
+                return RedirectToAction("Details", "UserProduct", new { id = id });
+            }
+            return RedirectToAction("Index" , "Home");
 
         }
         public async Task<IActionResult> RemoveProduct(int id)

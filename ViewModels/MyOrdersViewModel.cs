@@ -1,4 +1,5 @@
 ﻿using BuyU.Models;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace BuyU.ViewModels
@@ -19,6 +20,7 @@ namespace BuyU.ViewModels
         [Required]
         public string? PhoneNumber { get; set; }
         public double TotalPrice { get; set; }
+        [DefaultValue("Under review")]
         public string? Status { get; set; }
     }
 }

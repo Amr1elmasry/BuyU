@@ -50,6 +50,8 @@ namespace BuyU.Controllers
                 PhoneNumber = user.PhoneNumber,
                 Email = user.Email,
                 TotalPrice = totalprice,
+                Status = "Under review"
+                
             };
             if (User.IsInRole("Admin"))
             {
@@ -67,7 +69,7 @@ namespace BuyU.Controllers
             var userId = user.Id;
             var cart = await _context.Carts.Include(p => p.Products).Include(p=>p.CartProduct).SingleOrDefaultAsync(c => c.UserId == userId);
             double totalprice = model.TotalPrice;
-            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address= model.Address , Email = model.Email , Name = model.Name , PhoneNumber = model.PhoneNumber , products = cart.Products};
+            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address= model.Address , Email = model.Email , Name = model.Name , PhoneNumber = model.PhoneNumber , products = cart.Products , Status = "Under review"};
             _context.Orders.Add(order);
             _context.SaveChanges();
             var UserOrder = await _context.Orders.Include(p=>p.OrderDetails).SingleOrDefaultAsync(u => u.OrderId == order.OrderId);
@@ -109,8 +111,8 @@ namespace BuyU.Controllers
                 Products = p.products.ToList(),
                 PhoneNumber = p.PhoneNumber,
                 TotalPrice = (double)p.TotalPrice,
-                Status = "Under Review",
-
+                
+                Status = p.Status,
 
             }).ToList();
             //orders

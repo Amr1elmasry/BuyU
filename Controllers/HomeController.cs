@@ -95,6 +95,15 @@ namespace BuyU.Controllers
             {
                 _toastNotification.AddAlertToastMessage("You already have this product");
             }
+            else if (TempData["error"] as string == "add")
+            {
+                _toastNotification.AddSuccessToastMessage("Product added successfully");
+            }
+            else if (TempData["error"] as string != null)
+            {
+                _toastNotification.AddErrorToastMessage(TempData["error"] as string);
+            }
+
             return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
 
         }

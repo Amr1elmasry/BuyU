@@ -227,14 +227,19 @@
                     $.ajax({
 
                         url: '/Cart/AddToCart?id=' + id,
-                        success: function () {
-
-                            btn.addClass('disabled');
-                            btn.removeClass("btn btn-primary btn-sm mb-3 js-add")
-                            btn.addClass("btn btn-success btn-sm mb-3 js-add")
-                            document.getElementById('AddButton' + id).innerHTML = "In Your Cart";
-                            toastr.success('Product added successfully');
-
+                        success: function (str) {
+                            if (str == "success")
+                            {
+                                btn.addClass('disabled');
+                                btn.removeClass("btn btn-primary btn-sm mb-3 js-add")
+                                btn.addClass("btn btn-success btn-sm mb-3 js-add")
+                                document.getElementById('AddButton' + id).innerHTML = "In Your Cart";
+                                toastr.success('Product added successfully');
+                            }
+                            else 
+                            {
+                                toastr.error(str);
+                            }
                         },
                         error: function () {
                             toastr.error('Something went wrong');
@@ -243,7 +248,7 @@
                 }
                 else {
 
-                    location.replace('/Identity/Account/Login?ReturnUrl=%2FCart%2FAddToCart%3Fid%3D' + id);
+                    location.replace('/Identity/Account/Login?ReturnUrl=%2FCart%2FAddToCart%3Fok%3Dok%26id%3D' + id);
                 }
                 
 

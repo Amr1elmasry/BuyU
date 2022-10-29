@@ -18,6 +18,8 @@ namespace BuyU.Controllers
         {
             return User.Identity.IsAuthenticated;
         }
+
+        
     }
     
 }
