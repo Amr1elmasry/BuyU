@@ -12,6 +12,7 @@ using static NuGet.Packaging.PackagingConstants;
 
 namespace BuyU.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("MyOrders/[action]")]
     [Authorize]
     public class UserOrder : Controller
@@ -34,7 +35,7 @@ namespace BuyU.Controllers
             ViewData["userName"] = user.UserName;
             var userId = user.Id;
             var cart = await _context.Carts.Include(p => p.Products).Include(p=>p.CartProduct).SingleOrDefaultAsync(c => c.UserId == userId);
-            if (cart == null || cart.CartProduct == null)
+            if (cart == null || cart.CartProduct == null || cart.CartProduct.Count == 0)
             {
                 _toastNotification.AddAlertToastMessage("You don’t have any products in you cart");
                 return RedirectToAction("CartProducts", "UserCart");
@@ -100,6 +101,10 @@ namespace BuyU.Controllers
             {
                 orders = await _context.Orders.Include(p=>p.products).Where(u=>u.UserId==userId).ToListAsync();
                 //orders = user.Orders.OrderByDescending(d => d.dateTime).ToList();
+            }
+            else
+            {
+                return View(new MyOrdersViewModel());
             }
 
             var order = _context.Orders.Include(d => d.products).Where(u => u.UserId == userId).Select(p => new MyOrdersViewModel

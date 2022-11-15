@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace BuyU.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("Brands/[action]")]
     public class UserBrandsController : Controller
     {
@@ -13,7 +14,7 @@ namespace BuyU.Controllers
         {
             _context = buyUContext;
         }
-
+        
         public async Task<IActionResult> Index()
         {
             

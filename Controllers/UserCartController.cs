@@ -11,6 +11,7 @@ using System.Xml.Serialization;
 
 namespace BuyU.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route("Cart/[action]")]
     [Authorize]
     public class UserCartController : Controller
@@ -41,24 +42,7 @@ namespace BuyU.Controllers
             cartsViewModel.cartProducts = cart.CartProduct;
             return View(cartsViewModel);
         }
-        private string AddToCartValidation(int Productid , int ProductQty)
-        {
-            string massage = "success";
-            var product = _context.Products.Include(c=>c.CartProduct).FirstOrDefault(p => p.ProductId == Productid);
-
-            if (product != null)
-            {
-                if (ProductQty == 0) massage = "Quantity of product cannot be zero!";
-                else if (ProductQty < 0) massage = "Not eligible to add negative qty";
-                else if (product.Quantity == 0) massage = "This product is out of stock!";
-                else if (product.Quantity < ProductQty) massage = "The quantity of this product less than your request!";
-            }
-            else
-            {
-                massage = "Product is not found";
-            }
-            return massage;
-        }
+        
 
 
         [HttpPost]
@@ -93,12 +77,24 @@ namespace BuyU.Controllers
                 await _context.Carts.AddAsync(new Cart { UserId = user.Id, User = user});
                 await _context.SaveChangesAsync();
             }
-            var check = AddToCartValidation(id, 1);
+            var check = CommonFunctions.AddToCartValidation(_context , id, 1);
             if (check == "success")
             {
                 if (product.CartProduct.Any(p => p.CartId == user.CartId))
                 {
                     TempData["error"] = "true";
+                    
+                    if (ok == "ok")
+                    {
+                        TempData["error"] = "true";
+                        return RedirectToAction("Index", "Home");
+
+                    }
+                    else if (ok == "det")
+                    {
+                        TempData["error"] = "true";
+                        return RedirectToAction("Details", "UserProducts", new { id = id });
+                    }
                     return RedirectToAction("Index", "Home");
                 }
                 else
@@ -115,13 +111,18 @@ namespace BuyU.Controllers
             {
                 
                 TempData["error"] = check;
-                return RedirectToAction("Index", "Home");
+                
+
             }
             
             
 
             //_toastNotification.AddSuccessToastMessage("Product added successfully");
-            if (ok=="ok")
+            if (ok==null)
+            {
+                return Ok(check);
+            }
+            else if (ok=="ok")
             {
                 TempData["error"] = "add";
                 return RedirectToAction("Index", "Home");
@@ -132,6 +133,7 @@ namespace BuyU.Controllers
                 TempData["error"] = "add";
                 return RedirectToAction("Details", "UserProduct", new { id = id });
             }
+
             return RedirectToAction("Index" , "Home");
 
         }

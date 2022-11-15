@@ -1,81 +1,101 @@
-﻿//using BuyU.Models;
-//using Microsoft.AspNetCore.Identity;
-//using Microsoft.AspNetCore.Mvc;
-//using Microsoft.EntityFrameworkCore;
+﻿using BuyU.Classes;
+using BuyU.Models;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
-//namespace BuyU.Controllers.Api
-//{
-//    [Route("api/[controller]")]
-//    [ApiController]
-//    public class ApiProducts : Controller
-//    {
-//        private readonly BuyUContext _context;
-//        private readonly ILogger<HomeController> _logger;
-//        private readonly UserManager<ApplicationUser> _userManager;
-//        public ApiProducts(ILogger<HomeController> logger, BuyUContext context, UserManager<ApplicationUser> userManager)
-//        {
-//            _userManager = userManager;
-//            _logger = logger;
-//            _context = context;
+namespace BuyU.Controllers.Api
+{
+    [Route("api/Products/[action]")]
+    [ApiController]
+    public class ApiProducts : Controller
+    {
+        private readonly BuyUContext _context;
+        private readonly ILogger<HomeController> _logger;
+        private readonly UserManager<ApplicationUser> _userManager;
+        public ApiProducts(ILogger<HomeController> logger, BuyUContext context, UserManager<ApplicationUser> userManager)
+        {
+            _userManager = userManager;
+            _logger = logger;
+            _context = context;
+        }
 
-//        }
+        [HttpGet]
+        public async Task<IActionResult> GetProducts([FromQuery] HomeFilters? filters)
+        {
+            if (filters.searchKey != null)
+            {
+                filters.pageNumber = 1;
+            }
+            else
+            {
+                filters.searchKey = filters.searchKey;
+            }
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+                ViewData["user"] = string.Empty;
+            else
+            {
+                var userId = (await _userManager.GetUserIdAsync(user));
+                ViewData["user"] = userId;
+            }
+            ViewData["Skey"] = filters.searchKey;
+            ViewData["category"] = filters.category;
 
-//        [HttpPost]
-//        public async Task<IActionResult> GetProducts()
-//        {
-//            var pageSize = int.Parse(Request.Form["length"]);
-//            var skip = int.Parse(Request.Form["start"]);
+            var result = Enumerable.Empty<Product>().AsQueryable();
+            var buyUContext = _context.Products.Include(p => p.Brand).Include(c => c.Carts);
+            result = buyUContext.Where(p => true);
+            if (filters.searchKey != null && filters.category == null)
+                result = buyUContext.Where(s => s.Name.Contains(filters.searchKey));
+            else if (filters.category != null && filters.searchKey == null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category);
+            else if (filters.category != null & filters.searchKey != null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category && s.Name.Contains((string)filters.searchKey));
 
-//            var searchValue = Request.Form["search[value]"];
+            switch (filters.sortOrder)
+            {
+                case "PriceHighTolow":
+                    result = result.OrderByDescending(p => p.Price);
+                    break;
+                case "PricelowToHigh":
+                    result = result.OrderBy(p => p.Price);
+                    break;
 
-//            var sortColumn = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][name]")];
-//            var sortColumnDirection = Request.Form["order[0][dir]"];
+                default:
+                    break;
+            }
+            if (filters.min != null && filters.max == null)
+                result = result.Where(p => p.Price >= filters.min);
+            else if (filters.max != null && filters.min == null)
+                result = result.Where(p => p.Price <= filters.max);
+            else if (filters.min != null && filters.max != null)
+                result = result.Where(p => p.Price >= filters.min && p.Price <= filters.max);
+            ViewData["countOfprod"] = result.Count();
 
-//            IQueryable<Product> products = _context.Products.Where(m => string.IsNullOrEmpty(searchValue)
-//                ? true
-//                : (m.Name.Contains(searchValue) || m.Brand.BrandName.Contains(searchValue) ));
-
-//            if (!(string.IsNullOrEmpty(sortColumn) && string.IsNullOrEmpty(sortColumnDirection)))
-//            {
-//                products = products.OrderBy((string.Concat(sortColumn , " " , sortColumnDirection)));
-//            }
-//            var data = products.Skip(skip).Take(pageSize).ToList();
-
-//            var recordsTotal = products.Count();
-
-//            var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data };
+            filters.pageSize = filters.pageSize != 0 ? filters.pageSize : 8;
 
 
+            return Ok(result);
+
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Details([FromQuery] int? id)
+        {
+            if (id == null)
+                return BadRequest("No id found");
+            var product = await _context.Products
+                .Include(p => p.Brand).Include(c => c.Carts)
+                .FirstOrDefaultAsync(m => m.ProductId == id);
+            if (product == null)
+            {
+                return NotFound("No Product found");
+            }
+
+            return Ok(product);
+        }
 
 
-
-
-//            var user = await _userManager.GetUserAsync(User);
-//            if (user == null)
-//                ViewData["user"] = string.Empty;
-//            else
-//            {
-//                var userId = await _userManager.GetUserIdAsync(user);
-//                ViewData["user"] = userId;
-//            }
-//            var pageSize = int.Parse(Request.Form["length"]);
-//            var skip = int.Parse(Request.Form["start"]);
-
-//            var searchValue = Request.Form["search[value]"];
-
-//            var sortColumn = Request.Form[string.Concat("columns[", Request.Form["order[0][column]"], "][name]")];
-//            var sortColumnDirection = Request.Form["order[0][dir]"];
-//            IQueryable<Product> customers = _context.Products.Where(m => string.IsNullOrEmpty(searchValue)
-//               ? true
-//               : (m.Name.Contains(searchValue) || m.Brand.BrandName.Contains(searchValue)));
-
-//            var buyUContext = _context.Products.Include(p => p.Brand).Include(c => c.Carts);
-//            var products = await buyUContext.OrderBy(p => p.ProductId).ToListAsync();
-
-//            var recordsTotal = products.Count();
-//            var jsonData = new { recordsFiltered = recordsTotal, recordsTotal, data = products };
-
-//            return Ok(jsonData);
-//        }
-//    }
-//}
+        }
+}

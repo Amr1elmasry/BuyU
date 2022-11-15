@@ -7,6 +7,7 @@ using NToastNotify;
 
 namespace BuyU.Controllers
 {
+    [ApiExplorerSettings(IgnoreApi = true)]
     [Route ("Products/[action]")]
     public class UserProductsController : Controller
     {
@@ -28,21 +29,7 @@ namespace BuyU.Controllers
             return RedirectToAction("Index", "Home");
 
         }
-        [HttpPost]
-        public async Task<IActionResult> Index(string? searchKey)
-        {
-
-            ViewData["Skey"] = searchKey;
-            var buyUContext = _context.Products.Include(p => p.Brand);
-
-            if (searchKey == null)
-                return View(await buyUContext.ToListAsync());
-            if (searchKey != null)
-                return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
-
-            return View(await buyUContext.ToListAsync());
-
-        }
+        
 
         // GET: UserProductsController/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -69,7 +56,12 @@ namespace BuyU.Controllers
             }
             if (TempData["error"] as string == "add")
             {
+                
                 _toastNotification.AddSuccessToastMessage("Product added successfully");
+            }
+            else if (TempData["error"] as string == "true")
+            {
+                _toastNotification.AddAlertToastMessage("You already have this product");
             }
             return View(product);
         }

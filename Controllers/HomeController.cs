@@ -6,6 +6,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using NToastNotify;
 using System.Diagnostics;
+using System.Drawing.Printing;
 using System.Linq;
 namespace BuyU.Controllers
 {
@@ -25,26 +26,26 @@ namespace BuyU.Controllers
     
         }
 
-        public async Task<IActionResult> Index(string sortOrder,
-                int pageSize,
-                string searchString,
-                int? min, int? max,
-                int? pageNumber, string? searchKey, string? category)
+        public async Task<IActionResult> Index([FromQuery] HomeFilters? filters)
         {
-            ViewData["searchKey"] = searchKey;
-            ViewData["CurrentSort"] = sortOrder;
-            ViewData["category"] = category;
-            ViewData["min"] = min;
-            ViewData["max"] = max;
-            ViewData["pageSize"] = pageSize != 0 ? pageSize : 8; ;
-            ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
-            if (searchString != null)
+            if (filters.pageSize == 0 || filters.pageSize == null)
             {
-                pageNumber = 1;
+                filters.pageSize = 8;
+            }
+            ViewData["searchKey"] = filters.searchKey;
+            ViewData["CurrentSort"] = filters.sortOrder;
+            ViewData["category"] = filters.category;
+            ViewData["min"] = filters.min;
+            ViewData["max"] = filters.max;
+            ViewData["pageSize"] = filters.pageSize;
+            ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
+            if (filters.searchKey != null)
+            {
+                filters.pageNumber = 1;
             }
             else
             {
-                searchString = searchKey;
+                filters.searchKey = filters.searchKey;
             }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
@@ -54,23 +55,23 @@ namespace BuyU.Controllers
                 var userId = (await _userManager.GetUserIdAsync(user));
                 ViewData["user"] = userId;
             }
-            ViewData["Skey"] = searchKey;
-            ViewData["category"] = category;
+            ViewData["Skey"] = filters.searchKey;
+            ViewData["category"] = filters.category;
 
             var result = Enumerable.Empty<Product>().AsQueryable();
             var buyUContext = _context.Products.Include(p => p.Brand).Include(c => c.Carts);
             result = buyUContext.Where(p => true);
             //ViewData["maxPrice"] = result.Max(p => p.Price);
             //ViewData["minPrice"] = result.Min(p => p.Price);
-            if (searchKey != null && category == null)
-                result = buyUContext.Where(s => s.Name.Contains(searchKey));
+            if (filters.searchKey != null && filters.category == null)
+                result = buyUContext.Where(s => s.Name.Contains(filters.searchKey));
             //return View(await buyUContext.Where(s => s.Name.Contains((string)searchKey)).ToListAsync());
-            else if (category != null && searchKey == null)
-                result = buyUContext.Where(s => s.Brand.BrandName == category);
-            else if (category != null & searchKey != null)
-                result = buyUContext.Where(s => s.Brand.BrandName == category && s.Name.Contains((string)searchKey));
+            else if (filters.category != null && filters.searchKey == null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category);
+            else if (filters.category != null & filters.searchKey != null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category && s.Name.Contains((string)filters.searchKey));
 
-            switch (sortOrder)
+            switch (filters.sortOrder)
             {
                 case "PriceHighTolow":
                     result = result.OrderByDescending(p => p.Price);
@@ -82,15 +83,15 @@ namespace BuyU.Controllers
                 default:
                     break;
             }
-            if (min != null && max == null)
-                result = result.Where(p => p.Price >= min);
-            else if (max != null && min == null)
-                result = result.Where(p => p.Price <= max);
-            else if (min != null && max != null)
-                result = result.Where(p => p.Price >= min && p.Price <= max);
+            if (filters.min != null && filters.max == null)
+                result = result.Where(p => p.Price >= filters.min);
+            else if (filters.max != null && filters.min == null)
+                result = result.Where(p => p.Price <= filters.max);
+            else if (filters.min != null && filters.max != null)
+                result = result.Where(p => p.Price >= filters.min && p.Price <= filters.max);
             ViewData["countOfprod"] = result.Count();
 
-            pageSize = pageSize != 0 ? pageSize : 8;
+            
             if (TempData["error"] as string == "true")
             {
                 _toastNotification.AddAlertToastMessage("You already have this product");
@@ -104,7 +105,7 @@ namespace BuyU.Controllers
                 _toastNotification.AddErrorToastMessage(TempData["error"] as string);
             }
 
-            return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), pageNumber ?? 1, pageSize));
+            return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), filters.pageNumber ?? 1, (int)filters.pageSize ));
 
         }
 
