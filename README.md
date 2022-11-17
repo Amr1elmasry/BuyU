@@ -11,6 +11,8 @@
 
 - AdminRole Has Access To control products, users, and roles
 
+# Live View  
+http://www.buyu.somee.com/
 
 ## Home screen & Add product to cart (GIF)
 ![Home](https://user-images.githubusercontent.com/56364993/198843060-f7e7f083-15fd-4a57-a103-700165207c1c.gif)
