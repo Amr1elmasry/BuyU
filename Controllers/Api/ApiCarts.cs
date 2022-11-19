@@ -53,7 +53,7 @@ namespace BuyU.Controllers.Api
                 return NotFound("No User Found");
             var product = _context.Products.Include(c => c.CartProduct).FirstOrDefault(p => p.ProductId == ProductId);
             var user = _context.Users.Include(c => c.Cart).SingleOrDefault(u => u.Id == UserId);
-            if (user.CartId == null)
+            if (user.Cart == null)
             {
                 var Newcart = new Cart { UserId = user.Id, User = user };
                 await _context.Carts.AddAsync(new Cart { UserId = user.Id, User = user });
@@ -68,7 +68,7 @@ namespace BuyU.Controllers.Api
                 }
                 else
                 {
-                    _context.CartProduct.Add(new CartProduct { CartId = (int)user.CartId, ProductId = (int)ProductId, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
+                    _context.CartProduct.Add(new CartProduct { CartId = user.Cart.CartId, ProductId = (int)ProductId, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
                     user.CartId = user.Cart.CartId;
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();

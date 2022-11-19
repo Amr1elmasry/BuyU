@@ -71,7 +71,7 @@ namespace BuyU.Controllers
             var user = await CommonFunctions.UserIdAsync(_userManager, User);
             var product = _context.Products.Include(c=>c.CartProduct).FirstOrDefault(p => p.ProductId == id);
             user = _context.Users.Include(c => c.Cart).SingleOrDefault(u=>u.Id==user.Id);
-            if (user.CartId == null)
+            if (user.Cart == null)
             {
                 var Newcart = new Cart { UserId = user.Id, User = user };
                 await _context.Carts.AddAsync(new Cart { UserId = user.Id, User = user});
@@ -99,7 +99,7 @@ namespace BuyU.Controllers
                 }
                 else
                 {
-                    _context.CartProduct.Add(new CartProduct { CartId = (int)user.CartId, ProductId = id, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
+                    _context.CartProduct.Add(new CartProduct { CartId = user.Cart.CartId, ProductId = id, Quantity = 1, dateTime = DateTime.Now, Cart = user.Cart });
                     user.CartId = user.Cart.CartId;
                     _context.Users.Update(user);
                     await _context.SaveChangesAsync();
