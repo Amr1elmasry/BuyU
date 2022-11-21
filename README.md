@@ -15,13 +15,12 @@
 http://www.buyu.somee.com/
 
 ## Home screen & Add product to cart (GIF)
-![Home](https://user-images.githubusercontent.com/56364993/198843060-f7e7f083-15fd-4a57-a103-700165207c1c.gif)
-
+![Home](https://user-images.githubusercontent.com/56364993/202978616-caa6f903-35ef-444c-a971-6b9fae166804.gif)
 - User has methods in home screen to browse products like search, select category, sort and pagination
 ![alt text](https://dub01pap002files.storage.live.com/y4m1sGdKf10-zd6xzP2DlfAXnJbE-niPOyBR3RoftC2drTxVM2gK3cJsTQzCqGiFC7aw3bWjkkdVdIWTXVHLNzasCnq_X0xYEfATs8UTe7Bl3nHdKYwVpTU7vPMi-LBssaNDUgrEnsiY57P_XJPPLY0MUKxPnzrSf8wA7V5H_9UyKqgO0w95Q9yYQ9f3euyeHQf?width=1685&height=176&cropmode=none)
 
 ## User Cart (GIF)
-![Cart](https://user-images.githubusercontent.com/56364993/198842741-9ff93b0b-86d7-4237-9cdc-41deec884bc1.gif)
+![Cart](https://user-images.githubusercontent.com/56364993/202979195-c7362e22-8b03-4424-812b-2f6e0ef91037.gif)
 
 
 ## Order confirmation
