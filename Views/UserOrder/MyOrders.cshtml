@@ -4,15 +4,15 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
-@if (!Model.Any())
-{
-    <div class="text-center mt-5">
-        <h2 style="color:blue; font-family:cursive">No Orders are Found !</h2>
-    </div>
-}
-else{
-    <div style="margin-top:81px">
+<div style="margin-top:81px">
+    @if (!Model.Any())
+    {
+        <div class="text-center mt-5">
+            <h2 style="color:blue; font-family:cursive">No Orders are Found !</h2>
+        </div>
+    }
+    else{
+        
 
         <table class="table table-striped">
             <thead>
@@ -135,5 +135,6 @@ else{
                 }
             </tbody>
         </table>
-    </div>
+    
     }
+    </div>
