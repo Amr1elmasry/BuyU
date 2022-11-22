@@ -9,28 +9,31 @@
     <title>Index</title>
 </head>
 <body>
-    <h1 class="badge bg-secondary fs-6 mb-4">
-        Products Of Brand @ViewBag.BrandName
-    </h1>
-    <div class="row">
-        @foreach (var item in Model)
-        {
-            <div class="col-3 ">
-                <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
-                    <div class=" img-fluid text-center ">
-                        <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
-                    </div>
-                    <div class="card-body justify-content-between">
-                        <h5 class="card-title h-25 ">@item.Name</h5>
-                        <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
-                        <div class="col-md-13 ">
-                            <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
-                            <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-                            <a asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+    <div style="padding-top:80px;">
+        <h1 class="badge bg-secondary fs-6 mb-4">
+            Products Of Brand @ViewBag.BrandName
+        </h1>
+        <div class="row">
+            @foreach (var item in Model)
+            {
+                <div class="col-3 ">
+                    <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                        <div class=" img-fluid text-center ">
+                            <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
+                        </div>
+                        <div class="card-body justify-content-between">
+                            <h5 class="card-title h-25 ">@item.Name</h5>
+                            <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
+                            <div class="col-md-13 ">
+                                <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Edit" asp-route-id="@item.ProductId">Edit</a>
+                                <a style="margin-right:10px" asp-controller="AdminProducts" asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                                <a asp-controller="AdminProducts" asp-action="Delete" asp-route-id="@item.ProductId">Delete</a>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
+    </div>
 </body>
 </html>

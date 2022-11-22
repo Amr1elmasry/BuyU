@@ -1,5 +1,6 @@
 ﻿using BuyU.Classes;
 using BuyU.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -17,13 +18,13 @@ namespace BuyU.Controllers
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IToastNotification _toastNotification;
-        public HomeController(ILogger<HomeController> logger, BuyUContext context , UserManager<ApplicationUser> userManager, IToastNotification toastNotification )
+        public HomeController(ILogger<HomeController> logger, BuyUContext context, UserManager<ApplicationUser> userManager, IToastNotification toastNotification)
         {
             _userManager = userManager;
             _toastNotification = toastNotification;
             _logger = logger;
             _context = context;
-    
+
         }
 
         public async Task<IActionResult> Index([FromQuery] HomeFilters? filters)
@@ -91,7 +92,7 @@ namespace BuyU.Controllers
                 result = result.Where(p => p.Price >= filters.min && p.Price <= filters.max);
             ViewData["countOfprod"] = result.Count();
 
-            
+
             if (TempData["error"] as string == "true")
             {
                 _toastNotification.AddAlertToastMessage("You already have this product");
@@ -105,21 +106,31 @@ namespace BuyU.Controllers
                 _toastNotification.AddErrorToastMessage(TempData["error"] as string);
             }
 
-            return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), filters.pageNumber ?? 1, (int)filters.pageSize ));
+            return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), filters.pageNumber ?? 1, (int)filters.pageSize));
 
         }
 
 
         public ActionResult Details(int id)
         {
-            return RedirectToAction("Details","UserProduct",new {id = id});
+            return RedirectToAction("Details", "UserProduct", new { id = id });
         }
-        
+
         public ActionResult ChatWithAdmin()
         {
             return View();
         }
 
+        [Authorize(Roles = "Admin")]
+        [Route("Admin/Dashboard")]
+        public ActionResult Dashboard()
+        {
+            ViewData["Brands"] =  _context.Brands.AsQueryable().Count();
+            ViewData["Products"] =  _context.Products.AsQueryable().Count();
+            ViewData["Orders"] =  _context.Orders.AsQueryable().Count();
+            ViewData["Users"] =  _context.Users.AsQueryable().Count();
+            return View();
+        }
 
     }
 }

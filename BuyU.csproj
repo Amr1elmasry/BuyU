@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -15,6 +15,10 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Identity\Data\BuyUIdentityContext.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Home\eCommerce-website-banner-background %281%29.jpg" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +44,7 @@
   <ItemGroup>
     <Folder Include="Areas\Identity\Data\" />
     <Folder Include="Project Images\" />
+    <Folder Include="Views\NewFolder\" />
   </ItemGroup>
 
 </Project>

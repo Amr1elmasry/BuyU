@@ -11,94 +11,95 @@
     @{
         var check = Model.cartProducts == null || Model.cartProducts.Count() == 0;
     }
-    <div class="d-flex justify-content-between">
-        <h1 class="badge bg-secondary fs-6 mb-4">
-            Cart Of @ViewBag.userName
-        </h1>
-        @if(check)
-        {
-            <button href="javascript:;" disabled class="btn btn-danger js-delete h-25">
-            Delete All Products In Cart
-            </button>
-        }
-        else{
-            <button href="javascript:;" class="btn btn-danger js-delete h-25">
+    <div style="padding-top:80px;">
+        <div class="d-flex justify-content-between">
+            <h1 class="badge bg-secondary fs-6 mb-4">
+                Cart Of @ViewBag.userName
+            </h1>
+            @if(check)
+            {
+                <button href="javascript:;" disabled class="btn btn-danger js-delete h-25">
                 Delete All Products In Cart
-            </button>
-        }
+                </button>
+            }
+            else{
+                <button href="javascript:;" class="btn btn-danger js-delete h-25">
+                    Delete All Products In Cart
+                </button>
+            }
+            
+        </div>
         
-    </div>
-    
 
-    @if (check)
-        {
-            <div class="text-center mt-5">
-                <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
-            </div>
-        }
-    else if (@Model.cartProducts!=null)
-        {
-        <form asp-action="CartProducts" asp-controller="UserCart" method="post" class="input-group d-flex ">
-            <div class="row w-100">
-                <input asp-for="@Model.UserId" type="hidden" value="@Model.UserId" />
-                @for (int i = 0; i<@Model.cartProducts.Count(); i++)
-                {
-                    var item = Model.cartProducts[i];
-                    <input asp-for="@Model.cartProducts[i].ProductId" type="hidden" value="@Model.cartProducts[i].ProductId">
-                    <input asp-for="@Model.cartProducts[i].CartId" type="hidden" value="@Model.cartProducts[i].CartId">
-                    <input asp-for="@Model.cartProducts[i].dateTime" type="hidden" value="@Model.cartProducts[i].dateTime">
-                    <div class="col-3" id="cardpro">
-                        <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
-                            <div class=" img-fluid text-center ">
-                                <img class="card-img-top" style="width:100px; height:120px;" src="@Model.cartProducts[i].Product.Photo" alt="@Model.cartProducts[i].Product.Name">
-                            </div>
-                            <div class="card-body justify-content-between">
-                                <h5 class="card-title h-25 ">@Model.cartProducts[i].Product.Name</h5>
-                                <div class="card-text">
-                                    <p class="pricecard">@Model.cartProducts[i].Product.Price</p>
+        @if (check)
+            {
+                <div class="text-center mt-5">
+                    <h2 style="color:blue; font-family:cursive">No Products are Found !</h2>
+                </div>
+            }
+        else if (@Model.cartProducts!=null)
+            {
+            <form asp-action="CartProducts" asp-controller="UserCart" method="post" class="input-group d-flex ">
+                <div class="row w-100">
+                    <input asp-for="@Model.UserId" type="hidden" value="@Model.UserId" />
+                    @for (int i = 0; i<@Model.cartProducts.Count(); i++)
+                    {
+                        var item = Model.cartProducts[i];
+                        <input asp-for="@Model.cartProducts[i].ProductId" type="hidden" value="@Model.cartProducts[i].ProductId">
+                        <input asp-for="@Model.cartProducts[i].CartId" type="hidden" value="@Model.cartProducts[i].CartId">
+                        <input asp-for="@Model.cartProducts[i].dateTime" type="hidden" value="@Model.cartProducts[i].dateTime">
+                        <div class="col-3" id="cardpro">
+                            <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                                <div class=" img-fluid text-center ">
+                                    <img class="card-img-top" style="width:100px; height:120px;" src="@Model.cartProducts[i].Product.Photo" alt="@Model.cartProducts[i].Product.Name">
                                 </div>
-                            </div>
-                            <div class=" card-footer ">
-                                <div class="row row-cols-auto">
-                                    @{
-                                        var id = $"val{Model.cartProducts[i].ProductId}";
-                                        var name = $"val{Model.cartProducts[i].ProductId}";
-                                    }
-                                    
-                                    <span class="btn btn-sm" onclick="decrease(@Model.cartProducts[i].Product.Price,@Model.cartProducts[i].ProductId,@Model.cartProducts[i].Product.Quantity)"> <i class="fa fa-xs fa-minus"></i> </span>
-                                    @*<input id=@id class="mt-1"  style="width:25%; height:80%; text-align:center; font-style:bold;" asp-for="@Model.cartProducts[i].Quantity" value="@Model.cartProducts[i].Quantity" min="1" max="10" >*@
-                                    <input id=@id class="col m-1 " style="width:20%; height:80% " asp-for="@Model.cartProducts[i].Quantity" value="@Model.cartProducts[i].Quantity" min="1" max="10" readonly>
-                                    <span class="btn btn-sm" onclick="increase(@Model.cartProducts[i].Product.Price,@Model.cartProducts[i].ProductId,@Model.cartProducts[i].Product.Quantity)"> <i class="fa fa-xs fa-plus"></i></span>
-                                    <a class="col btn btn-primary btn-sm m-1" asp-controller="UserProducts" asp-action="Details" asp-route-id="@Model.cartProducts[i].ProductId">Details</a>
-                                    <a asp-action="RemoveProduct" class="col m-1 btn btn-danger btn-sm " asp-route-id="@Model.cartProducts[i].ProductId">Remove</a>
+                                <div class="card-body justify-content-between">
+                                    <h5 class="card-title h-25 ">@Model.cartProducts[i].Product.Name</h5>
+                                    <div class="card-text">
+                                        <p class="pricecard">@Model.cartProducts[i].Product.Price</p>
+                                    </div>
+                                </div>
+                                <div class=" card-footer ">
+                                    <div class="row row-cols-auto">
+                                        @{
+                                            var id = $"val{Model.cartProducts[i].ProductId}";
+                                            var name = $"val{Model.cartProducts[i].ProductId}";
+                                        }
+                                        
+                                        <span class="btn btn-sm" onclick="decrease(@Model.cartProducts[i].Product.Price,@Model.cartProducts[i].ProductId,@Model.cartProducts[i].Product.Quantity)"> <i class="fa fa-xs fa-minus"></i> </span>
+                                        @*<input id=@id class="mt-1"  style="width:25%; height:80%; text-align:center; font-style:bold;" asp-for="@Model.cartProducts[i].Quantity" value="@Model.cartProducts[i].Quantity" min="1" max="10" >*@
+                                        <input id=@id class="col m-1 " style="width:20%; height:80% " asp-for="@Model.cartProducts[i].Quantity" value="@Model.cartProducts[i].Quantity" min="1" max="10" readonly>
+                                        <span class="btn btn-sm" onclick="increase(@Model.cartProducts[i].Product.Price,@Model.cartProducts[i].ProductId,@Model.cartProducts[i].Product.Quantity)"> <i class="fa fa-xs fa-plus"></i></span>
+                                        <a class="col btn btn-primary btn-sm m-1" asp-controller="UserProducts" asp-action="Details" asp-route-id="@Model.cartProducts[i].ProductId">Details</a>
+                                        <a asp-action="RemoveProduct" class="col m-1 btn btn-danger btn-sm " asp-route-id="@Model.cartProducts[i].ProductId">Remove</a>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                        
-                }
-            </div>
-            <div class="col align-self-center mt-3">
-                <div class="justify-content-center mt-3">
-                    <div class="d-grid gap-2 col-3 mx-auto">
-                        <span  class="p-3 cl-3 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 text-center " >
-                            <div>
-                                Total Price Is :
-                            </div>
-                            <div id="price">
-                                @ViewBag.TotalPrice
-                            </div>
-                        </span>
+                            
+                    }
+                </div>
+                <div class="col align-self-center mt-3">
+                    <div class="justify-content-center mt-3">
+                        <div class="d-grid gap-2 col-3 mx-auto">
+                            <span  class="p-3 cl-3 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 text-center " >
+                                <div>
+                                    Total Price Is :
+                                </div>
+                                <div id="price">
+                                    @ViewBag.TotalPrice
+                                </div>
+                            </span>
 
-                        <button type="submit" class="btn btn-primary m-2">
-                            Accept Order
-                        </button>
+                            <button type="submit" class="btn btn-primary m-2">
+                                Accept Order
+                            </button>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-        }
-        
+            </form>
+            }
+        </div>
 </body>
 </html>
 

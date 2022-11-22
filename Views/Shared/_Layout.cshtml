@@ -16,7 +16,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark border-bottom box-shadow mb-3  fixed-top">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">BuyU</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -26,36 +26,60 @@
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
-
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="@ViewData["pageSize"]">Home</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="@ViewData["pageSize"]">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UserCart" asp-action="CartProducts">Cart</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="UserCart" asp-action="CartProducts">Cart</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="UserOrder" asp-action="MyOrders">MyOrders</a>
+                            <a class="nav-link text-light" asp-area="" asp-controller="UserOrder" asp-action="MyOrders">MyOrders</a>
                         </li>
                         
 
                         @if (User.IsInRole("Admin"))
                         {
+
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminProducts" asp-action="Index">AdminProducts</a>
+                                <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Dashboard">Dashboard</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="AdminBrands" asp-action="Index">AdminBrands</a>
+                                <div class="dropdown">
+                                    <a class="nav-link text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Products</a>
+
+
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="AdminProducts" asp-action="Create">Add Product</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="AdminProducts" asp-action="Index">Browse All Products</a></li>
+                                    </ul>
+                                </div>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="AdminRoles" asp-action="Index">Manage Roles</a>
+                                <div class="dropdown">
+                                    <a class="nav-link text-light dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">Brands</a>
+
+
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="AdminProducts" asp-action="Create">Add Brand</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-controller="AdminBrands" asp-action="Index">Browse All Brands</a></li>
+                                    </ul>
+                                </div>
+                                
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="AdminUsers" asp-action="Index">Manage Users</a>
+                                <a class="nav-link text-light" asp-controller="AdminOrders" asp-action="Index">Orders</a>
+                            </li>
+                            
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="AdminRoles" asp-action="Index">Manage Roles</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-light" asp-controller="AdminUsers" asp-action="Index">Manage Users</a>
                             </li>
                         }
                         else
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Home" asp-action="ChatWithAdmin">Chat With Admin</a>
+                                <a class="nav-link text-light" asp-controller="Home" asp-action="ChatWithAdmin">Chat With Admin</a>
                             </li>
                         }
                         
@@ -66,6 +90,7 @@
             </div>
         </nav>
     </header>
+    
     <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()

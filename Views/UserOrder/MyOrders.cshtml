@@ -1,76 +1,139 @@
-﻿@model List<BuyU.ViewModels.MyOrdersViewModel>
+﻿@model IEnumerable<BuyU.Models.Order>
 
 @{
-    ViewData["Title"] = "MyOrders";
+    ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>MyOrders</h1>
-@{
-    var check = !Model.Any();
-}
-@if (check)
+@if (!Model.Any())
 {
     <div class="text-center mt-5">
         <h2 style="color:blue; font-family:cursive">No Orders are Found !</h2>
     </div>
 }
-else 
-{
-    <table class="table">
-        <thead>
-            <tr>
-                <th>
-                    Name
-                </th>
-                <th>
-                    Email
-                </th>
-                <th>
-                    Address
-                </th>
-                <th>
-                    PhoneNumber
-                </th>
-                <th>
-                    TotalPrice
-                </th>
-                <th>
-                    Status
-                </th>
-                <th></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
+else{
+    <div style="margin-top:81px">
+
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Name)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Email)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Address)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.PhoneNumber)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.TotalPrice)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(modelItem => item.Status)
-                    </td>
-                    <td>
-
-                        <a class="btn btn-warning btn-sm" href="#" role="button">Products</a>
-                    </td>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Name)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Email)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Address)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.PhoneNumber)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TotalPrice)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.dateTime)
+                    </th>
+                    <th>
+                        @Html.Display("Products")
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Status)
+                    </th>
                 </tr>
-            }
-        </tbody>
-    </table>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr style="vertical-align: middle; text-style:Bold;">
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Name)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Address)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.PhoneNumber)
+                        </td>
+                        
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TotalPrice)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.dateTime)
+                        </td>
+                        <td>
+                            <div class="row h-50" style="margin-top:-11px;">
+                                <div class="col-12 h-50">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    Item
+                                                </th>
+                                                <th>
+                                                    Name
+                                                </th>
+                                                <th>
+                                                    PriceForOne
+                                                </th>
+                                                <th>
+                                                    Qunatity
+                                                </th>
+                                                <th>
+                                                    Total
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @{
+                                                int? totalItemPrice = 0;
+                                            }
+                                            @foreach (var i in item.OrderDetails)
+                                            {
+                                                <tr>
+                                                    <td>
+                                                        <div class="row">
+                                                            <div class="col-sm">
+                                                                <img src="@i.Product.Photo" width="30" height="50" alt="shoes_img" />
+                                                            </div>
+                                                            
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div class="col-sm">
+                                                            <h6 class="card-title"> @i.Product.Name</h6>
+                                                        </div>
+                                                    </td>
+                                                    <td><p>EGP @i.Product.Price</p></td>
 
-}
+                                                    <td><p>@i.Qty </p></td>
+                                                    @{
+                                                        totalItemPrice = i.Qty * i.Product.Price;
+                                                    }
+                                                    <td><p>@totalItemPrice EGP </p></td>
 
+                                                </tr>
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </td>
+                        <td >
+                            <span>
+                                <p style="padding-left:29px;" class="border border-primary rounded-pill"> @item.Status</p>
+                            </span>
+                   
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    }

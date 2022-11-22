@@ -1,0 +1,115 @@
+﻿@{
+    ViewData["Title"] = "Dashboard";
+}
+<div style="padding-top:80px;">
+    <h3>Admin Dashboard</h3>
+    <hr />
+
+    <div class="col-12">
+        <div class="row">
+            <div class="col-4 my-3">
+                <div class="card card-1">
+                    <a asp-action="Index" asp-controller="AdminProducts" class="dash_card">
+                        <div class="card-body ">
+                            <h5>
+                                <i class="fa fa-product-hunt" aria-hidden="true"></i>
+                                Products
+                            </h5>
+                            <h1> @ViewBag.Products </h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            <div class="col-4 my-3">
+                <div class="card card-2">
+                    <a asp-action="Index" asp-controller="AdminBrands" class="dash_card">
+
+                        <div class="card-body">
+                            <h5>
+                                <i class="fa fa-list-alt" aria-hidden="true"></i>
+                                Categories
+                            </h5>
+                            <h1> @ViewBag.Brands </h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            
+            <div class="col-4 my-3">
+                <div class="card card-3">
+                    <a asp-action="Index" asp-controller="AdminOrders" class="dash_card">
+
+                        <div class="card-body ">
+                            <h5>
+                                <i class="fa fa-first-order" aria-hidden="true"></i>
+                                Orders
+                            </h5>
+                            <h1> @ViewBag.Orders </h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            
+            
+            <div class="col-4 my-3">
+                <div class="card card-4">
+                    <a asp-controller="AdminUsers" asp-action="Index" class="dash_card">
+
+                        <div class="card-body ">
+                            <h5>
+                                <i class="fa fa-user" aria-hidden="true"></i>
+                                Users
+                            </h5>
+                            <h1> @ViewBag.Users </h1>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<style>
+    /*Dashboard card*/
+    .card-1 {
+        border-radius: 25px;
+        border-color: #66B60C;
+        background-color: #66B60C
+    }
+
+    .card-2 {
+        border-radius: 25px;
+        background-color: #F33131;
+    }
+
+    .card-3 {
+        border-radius: 25px;
+        background-color: #0C9DC4;
+    }
+
+    .card-4 {
+        border-radius: 25px;
+        background-color: #AD08A1;
+    }
+
+    .card-5 {
+        border-radius: 25px;
+        background-color: #CCCF0A;
+    }
+
+    .card-6 {
+        border-radius: 25px;
+        background-color: #F74D08;
+    }
+
+    .dash_card {
+        text-decoration: none;
+        color: #fff;
+    }
+
+        .dash_card:hover, dash_card:focus, dash_card:active {
+            text-decoration: none;
+            color: #fff;
+        }
+</style>

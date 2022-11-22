@@ -1,0 +1,124 @@
+﻿@model IEnumerable<BuyU.Models.Order>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div style="margin-top:81px">
+   
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Email)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Address)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.PhoneNumber)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Status)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TotalPrice)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.dateTime)
+                </th>
+                <th>
+                    @Html.Display("Products")
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+    @foreach (var item in Model) {
+                <tr style="vertical-align: middle; text-style:Bold;">
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Address)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Status)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TotalPrice)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.dateTime)
+                </td>
+                <td>
+                    <div class="row h-50" style="margin-top:-11px;">
+                        <div class="col-12 h-50">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            Item
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                        <th>
+                                            Qunatity
+                                        </th>
+                                        <th>
+                                            Price
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+                                        int? totalItemPrice = 0;
+                                    }
+                                    @foreach (var i in item.OrderDetails)
+                                    {
+                                        <tr>
+                                            <td>
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <img src="@i.Product.Photo" width="30" height="50" alt="shoes_img" />
+                                                    </div>
+                                                    <div class="col-sm">
+                                                        <h6 class="card-title"> @i.Product.Name</h6>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td><p>EGP @i.Product.Price</p></td>
+
+                                            <td><p>@i.Qty </p></td>
+                                            @{
+                                                totalItemPrice = i.Qty * i.Product.Price;
+                                            }
+                                            <td><p>@totalItemPrice EGP </p></td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                
+                </td>
+                <td>
+                    <a class="btn btn-success" asp-action="Edit" asp-route-id="@item.OrderId">Edit</a>
+                    
+                </td>
+            </tr>
+    }
+        </tbody>
+    </table>
+</div>

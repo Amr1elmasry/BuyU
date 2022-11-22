@@ -6,6 +6,10 @@ namespace BuyU.Models
 {
     public class Order
     {
+        public Order()
+        {
+            this.Products = new List<Product>();
+        }
         [Required]
         public int OrderId { get; set; }
         [Required]
@@ -28,8 +32,8 @@ namespace BuyU.Models
         public DateTime dateTime { get; set; }
         public string UserId { get; set; }
         public ApplicationUser User { get; set; }
-        public virtual ICollection<OrderDetail>? OrderDetails { get; set; }
-        public virtual ICollection<Product>? products { get; set; } 
+        public ICollection<OrderDetail>? OrderDetails { get; set; }
+        public ICollection<Product>? Products { get; set; } 
 
     }
 }

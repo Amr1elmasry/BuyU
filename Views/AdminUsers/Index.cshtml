@@ -4,43 +4,43 @@
 @{
     ViewData["Title"] = "Users";
 }
+<div style="padding-top:80px;">
+    <h1>Users</h1>
 
-<h1>Users</h1>
-
-<a asp-action="Add" class="btn btn-primary">Add New</a>
-<table class="table table-striped mt-4">
-    <thead>
-        <tr class="bg-primary text-white">
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>User Name</th>
-            <th>Email</th>
-            <th>Roles</th>
-            <th>Actions</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var user in Model)
-        {
-            <tr>
-                <td>@user.FirstName</td>
-                <td>@user.LastName</td>
-                <td>@user.UserName</td>
-                <td>@user.Email</td>
-                <td>@string.Join(" , ", user.Roles.ToList())</td>
-                <td>
-                    <a class="btn btn-primary" asp-controller="AdminUsers" asp-action="ManageRoles" asp-route-userId="@user.Id">Manage Roles</a>
-                    <a class="btn btn-secondary" asp-controller="AdminUsers" asp-action="Edit" asp-route-userId="@user.Id">Edit</a>
-                    <a href="javascript:;" class="btn btn-danger js-delete" data-id="@user.Id">Delete</a>
-                </td>
+    <a asp-action="Add" class="btn btn-primary">Add New</a>
+    <table class="table table-striped mt-4">
+        <thead>
+            <tr class="bg-primary text-white">
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>User Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th>Actions</th>
             </tr>
-        }
-    </tbody>
+        </thead>
 
-</table>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.FirstName</td>
+                    <td>@user.LastName</td>
+                    <td>@user.UserName</td>
+                    <td>@user.Email</td>
+                    <td>@string.Join(" , ", user.Roles.ToList())</td>
+                    <td>
+                        <a class="btn btn-primary" asp-controller="AdminUsers" asp-action="ManageRoles" asp-route-userId="@user.Id">Manage Roles</a>
+                        <a class="btn btn-secondary" asp-controller="AdminUsers" asp-action="Edit" asp-route-userId="@user.Id">Edit</a>
+                        <a href="javascript:;" class="btn btn-danger js-delete" data-id="@user.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
 
+    </table>
 
+</div>
 @section Scripts {
     <script>
         $(document).ready(function ()

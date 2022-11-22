@@ -4,42 +4,43 @@
     ViewData["Title"] = "Brands";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
+<div style="padding-top:80px;">
+    <h1>Brands In The Site</h1>
 
-<h1>Brands In The Site</h1>
 
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.BrandName)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Photo)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var item in Model)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.BrandName)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Description)
-                </td>
-                <td>
-                    @Html.DisplayFor(modelItem => item.Photo)
-                </td>
-                <td>
-                    <a asp-action="ProductsOfBrand" asp-route-id="@item.BrandId">Show Products</a> |
-                </td>
+                <th>
+                    @Html.DisplayNameFor(model => model.BrandName)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Description)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Photo)
+                </th>
+                <th></th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.BrandName)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Photo)
+                    </td>
+                    <td>
+                        <a asp-action="ProductsOfBrand" asp-route-id="@item.BrandId">Show Products</a> |
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>

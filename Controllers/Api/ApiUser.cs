@@ -1,7 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using BuyU.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,7 +8,7 @@ namespace BuyU.Controllers.Api
     [Route("api/User/[action]")]
     public class ApiUser : ControllerBase
     {
-         private readonly BuyUContext _context;
+        private readonly BuyUContext _context;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -23,7 +19,7 @@ namespace BuyU.Controllers.Api
             _signInManager = signInManager;
         }
         [HttpPost]
-        public async Task<IActionResult> Login ([FromForm] LoginData data )
+        public async Task<IActionResult> Login([FromForm] LoginData data)
         {
             string? userName = data.userName;
             string? password = data.password;
@@ -33,26 +29,26 @@ namespace BuyU.Controllers.Api
             {
                 user = await _userManager.FindByNameAsync(userName);
 
-                
-            }
-            if (user != null) 
-                {
-                    var roles = await _userManager.GetRolesAsync(user);
-                    var result = await _signInManager.PasswordSignInAsync(user,password, (bool)rememberMe,false);
-                    if (result.Succeeded)
-                    {
 
-                        return Ok(user.Id);
-                    }
-                    return NotFound("Username or password is incorrect");
+            }
+            if (user != null)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                var result = await _signInManager.PasswordSignInAsync(user, password, (bool)rememberMe, false);
+                if (result.Succeeded)
+                {
+
+                    return Ok(user.Id);
                 }
+                return NotFound("Username or password is incorrect");
+            }
             return NotFound("Username or password is incorrect2");
         }
 
         [HttpPost]
         public async Task<IActionResult> Register([FromForm] RegisterData data)
         {
-            if(!ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Check your inputs");
             }
@@ -76,12 +72,14 @@ namespace BuyU.Controllers.Api
                 UserName = userName,
                 Email = eMail,
             };
-            var result = await _userManager.CreateAsync(user,password);
+            var result = await _userManager.CreateAsync(user, password);
             if (result.Succeeded)
+            {
+                await _userManager.AddToRoleAsync(user, "User");
                 return Ok(user);
-
+            }
             return BadRequest(result.Errors.Select(e => e.Description).ToList());
-            
+
 
 
         }

@@ -11,208 +11,216 @@
     <title>Index</title>
         
 </head>
-<body onload="checkFilters()">
-    
-    <div class="col">
-        <form id="Filters" name="Filters" asp-action="Index" method="get" class="input-group d-flex ">
-            <div class="row w-100 ">
-                @{
-                    var count = $"Items count =  {@ViewBag.pageSize}";
-                }
-                <div class="col-2 ">
-                    <div class="dropdown">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" id="count" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @count
-                        </a>
-
-                        <ul class="dropdown-menu">
-                            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="8">8</a>
-                            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="12">12</a>
-                            <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="16">16</a>
-
-                        </ul>
-                    </div>
-                    <div class="input-group-btn mt-3">
-
-                        <input style="width:auto; height:80%" type="number" value="@ViewBag.min" name="min" min="10" max="100000" placeholder="Min Price">
-                        <br />
-                        <input style="width:auto; height:80% ; margin-top:3px" value="@ViewBag.max" type="number" name="max" min="10" max="100000" placeholder="Max Price">
-                        
-                    </div>
-                </div>
-
-                <div class="col-8 ">
-                    <input class="col form-control " type="text" id="sKey" asp-route-searchKey="searchKey" name="searchKey" placeholder="Search for product or brand" value=@ViewBag.Skey />
-                    <div class="row justify-content-center">
-                        <div class="col align-self-center input-group-btn">
-                            @foreach (var brand in @ViewBag.brandsName)
-                            {
-
-                                <input type="radio" class="radio" id=@brand name="category" value="@brand">
-                                <label for="@brand">@brand</label>
-
-                            }
-                        </div>
-
-
-                        <div class="input-group-btn d-flex align-self-center justify-content-center">
-                            <button type="submit" class="btn btn-primary m-2">
-                                Search
-                            </button>
-                            <a asp-action="Index" class=" btn btn-outline-secondary  m-2">
-                                Reset
-                            </a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-2  ">
+<body class="" onload="checkFilters()">
+    <div style="padding-top:80px;">
+        <div class="container">
+            <div class="row rounded border border-info bg-light p-2 justify-content-center ">
+                <form id="Filters" name="Filters" asp-action="Index" method="get" class="input-group d-flex ">
+                    
+                    
                     @{
-                        var sort = ViewBag.CurrentSort == null ? "Sort By" : ViewBag.CurrentSort;
+                        var count = $"Items count =  {@ViewBag.pageSize}";
                     }
-                    <div class="dropdown">
-                        <a class="btn btn-secondary dropdown-toggle" href="#" id="sorts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            @sort
-                        </a>
+                    <div class="col-sm " style="padding-bottom:11px">
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" id="count" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @count
+                            </a>
 
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PriceHighTolow" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize=@ViewData["pageSize"]>Price High To Low</a></li>
-                            <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PricelowToHigh" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize=@ViewData["pageSize"]>Price low To High</a></li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-            
-            
-        </form>
-    </div>
-    <div class="row mt-3">
+                            <ul class="dropdown-menu">
+                                <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="8">8</a>
+                                <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="12">12</a>
+                                <a class="dropdown-item" asp-action="Index" asp-route-sortOrder="@ViewData["CurrentSort"]" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize="16">16</a>
 
-        @if (!Model.Any())
-        {
-            var x = ViewBag.Skey;
-            <div class="text-center mt-5" id="searchArea">
-                <h2 style="color:blue; font-family:cursive">@($"No Results About {x}")</h2>
-            </div>
-
-        }
-        @foreach (var item in Model)
-        {
-            string con;
-            <div class="col-3  ">
-                <div class="card text-center mr-5 mb-3" style="width: 18rem; height:20rem;">
-                    <div class=" img-fluid text-center ">
-                        <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
-                    </div>
-                    <div class="card-body justify-content-between">
-                        <h5 class="card-title  ">@item.Name</h5>
-                        <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
-                        <div class="card-text">
-                            <p class="pricecard">@item.Price</p>
+                            </ul>
                         </div>
-                        
-                        <div class="col-md-13 ">
-                            
-                            @if (User.IsInRole("Admin"))
-                            {
-                                con = "AdminProducts";
-                            }
-                            else
-                            {
-                                con = "UserProducts";
-                                
-                            }
-                            <div class=" card-footer ">
-                                <a class="btn btn-outline-secondary btn-sm mb-3" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                        <div class="input-group-btn mt-3">
 
-                                @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user)) 
+                            <input style="width:auto; height:80%" type="number" value="@ViewBag.min" name="min" min="10" max="100000" placeholder="Min Price">
+                            <br />
+                            <input style="width:auto; height:80% ; margin-top:3px" value="@ViewBag.max" type="number" name="max" min="10" max="100000" placeholder="Max Price">
+                        
+                        </div>
+                    </div>
+                    <br>
+                    <div class="col-8" style="padding-right:51px; padding-bottom:11px">
+                        <input class="col form-control " type="text" id="sKey" asp-route-searchKey="searchKey" name="searchKey" placeholder="Search for product or brand" value=@ViewBag.Skey />
+                        <div class="row justify-content-center" style="padding-top:7px ;">
+                            <div class="col align-self-center input-group-btn">
+                                @foreach (var brand in @ViewBag.brandsName)
                                 {
-                                    var id = $"AddButton{item.ProductId}";
-                                    <button id=@id class="btn btn-primary btn-sm mb-3 js-add" href="javascript:;" data-id=@item.ProductId>
-                                        Add To Cart
-                                    </button>
-                                    
-                                }
-                                else
-                                {
-                                    <button id="AddButton @item.ProductId" class="btn btn-success btn-sm mb-3 js-add" href="javascript:;" disabled data-id=@item.ProductId>
-                                        In Your Cart
-                                    </button>
+
+                                    <input type="radio" class="radio" id=@brand name="category" value="@brand">
+                                    <label for="@brand">@brand</label>
+
                                 }
                             </div>
 
+
+                            <div class="input-group-btn d-flex align-self-center justify-content-center">
+                                <button type="submit" class="btn btn-primary m-2">
+                                    Search
+                                </button>
+                                <a asp-action="Index" class=" btn btn-outline-secondary  m-2">
+                                    Reset
+                                </a>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        }
-    </div>
-    @{
-        var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
-        var nextDisabled = !Model.HasNextPage ? "disabled" : "";
-        var currPage = " btn btn-default page-link m-2 ";
+                    <br>
+                    <div class="col-sm  ">
+                        @{
+                            var sort = ViewBag.CurrentSort == null ? "Sort By" : ViewBag.CurrentSort;
+                        }
+                        <div class="dropdown">
+                            <a class="btn btn-secondary dropdown-toggle" href="#" id="sorts" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                @sort
+                            </a>
 
-    }
-    <div class="pagination justify-content-center m-3">
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex - 1)"
-           asp-route-searchKey="@ViewData["searchKey"]"
-           asp-route-category="@ViewData["category"]"
-           asp-route-pageSize="@ViewData["pageSize"]"
-           asp-route-min="@ViewData["min"]"
-           asp-route-max="@ViewData["max"]"
-           class="btn btn-default page-link m-2  @prevDisabled">
-            Previous 
-        </a>
-        @{int size =0;
-            int temp = 1;}
-        @if (@ViewBag.pageSize == 0)
-        {
-            size = 8;
-        }
-        else
-        {
-            size = @ViewBag.pageSize;
-        }
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PriceHighTolow" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize=@ViewData["pageSize"]>Price High To Low</a></li>
+                                <li><a class="dropdown-item" asp-action="Index" asp-route-sortOrder="PricelowToHigh" asp-route-searchKey="@ViewData["searchKey"]" asp-route-category="@ViewData["category"]" asp-route-pageSize=@ViewData["pageSize"]>Price low To High</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                
+                
+                </form>
+            </div>
+        </div>
+        <div class=" container-fluid">
+            <div class="row mt-3">
+
+                @if (!Model.Any())
+                {
+                    var x = ViewBag.Skey;
+                    <div class="text-center mt-5" id="searchArea">
+                        <h2 style="color:blue; font-family:cursive">@($"No Results About {x}")</h2>
+                    </div>
+
+                }
+                else {
+                    @foreach (var item in Model)
+                    {
+                        string con;
+                        <div class="col" style="padding-bottom: 20px;">
+                            <div class="card text-center mr-5 mb-3" style="width: 18rem; height:20rem;">
+                                <div class=" img-fluid text-center ">
+                                    <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
+                                </div>
+                                <div class="card-body justify-content-between">
+                                    <h5 class="card-title  ">@item.Name</h5>
+                                    <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
+                                    <div class="card-text">
+                                        <p class="pricecard">@item.Price</p>
+                                    </div>
+                                
+                                    <div class="col-md-13 ">
+                                    
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            con = "AdminProducts";
+                                        }
+                                        else
+                                        {
+                                            con = "UserProducts";
+                                        
+                                        }
+                                        <div class=" card-footer ">
+                                            <a class="btn btn-outline-secondary btn-sm mb-3" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+
+                                            @if (ViewBag.user == string.Empty || !item.Carts.Any(p => p.UserId == ViewBag.user)) 
+                                            {
+                                                var id = $"AddButton{item.ProductId}";
+                                                <button id=@id class="btn btn-primary btn-sm mb-3 js-add" href="javascript:;" data-id=@item.ProductId>
+                                                    Add To Cart
+                                                </button>
+                                            
+                                            }
+                                            else
+                                            {
+                                                <button id="AddButton @item.ProductId" class="btn btn-success btn-sm mb-3 js-add" href="javascript:;" disabled data-id=@item.ProductId>
+                                                    In Your Cart
+                                                </button>
+                                            }
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                }
+            </div>
+        </div>
         @{
-            if (ViewBag.countOfprod % size ==0)
+            var prevDisabled = !Model.HasPreviousPage ? "disabled" : "";
+            var nextDisabled = !Model.HasNextPage ? "disabled" : "";
+            var currPage = " btn btn-default page-link m-2 ";
+
+        }
+        <div class="pagination justify-content-center m-3">
+            <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex - 1)"
+               asp-route-searchKey="@ViewData["searchKey"]"
+               asp-route-category="@ViewData["category"]"
+               asp-route-pageSize="@ViewData["pageSize"]"
+               asp-route-min="@ViewData["min"]"
+               asp-route-max="@ViewData["max"]"
+               class="btn btn-default page-link m-2  @prevDisabled">
+                Previous 
+            </a>
+            @{int size =0;
+                int temp = 1;}
+            @if (@ViewBag.pageSize == 0)
             {
-                temp = ViewBag.countOfprod / size;
+                size = 8;
             }
             else
             {
-                temp = (ViewBag.countOfprod / size) + 1;
+                size = @ViewBag.pageSize;
             }
-        }
+            @{
+                if (ViewBag.countOfprod % size ==0)
+                {
+                    temp = ViewBag.countOfprod / size;
+                }
+                else
+                {
+                    temp = (ViewBag.countOfprod / size) + 1;
+                }
+            }
             
-        @for (int i = 1; i <= temp; i++)
-        {
-            currPage = (i == Model.PageIndex) ? " btn btn-primary  page-link m-2 disabled " : " btn btn-default page-link m-2 ";
+            @for (int i = 1; i <= temp; i++)
+            {
+                currPage = (i == Model.PageIndex) ? " btn btn-primary  page-link m-2 disabled " : " btn btn-default page-link m-2 ";
+                <a asp-action="Index"
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber=@i
+               asp-route-searchKey="@ViewData["searchKey"]"
+               asp-route-category="@ViewData["category"]"
+               asp-route-pageSize="@ViewData["pageSize"]"
+               asp-route-min="@ViewData["min"]"
+               asp-route-max="@ViewData["max"]"
+               class="@currPage" >
+                @i
+            </a>
+
+            }
+
             <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber=@i
-           asp-route-searchKey="@ViewData["searchKey"]"
-           asp-route-category="@ViewData["category"]"
-           asp-route-pageSize="@ViewData["pageSize"]"
-           asp-route-min="@ViewData["min"]"
-           asp-route-max="@ViewData["max"]"
-           class="@currPage" >
-            @i
-        </a>
-
-        }
-
-        <a asp-action="Index"
-           asp-route-sortOrder="@ViewData["CurrentSort"]"
-           asp-route-pageNumber="@(Model.PageIndex + 1)"
-           asp-route-searchKey="@ViewData["searchKey"]"
-           asp-route-category="@ViewData["category"]"
-           asp-route-pageSize="@ViewData["pageSize"]"
-           asp-route-min="@ViewData["min"]"
-           asp-route-max="@ViewData["max"]"
-           class="btn btn-default page-link m-2 @nextDisabled">
-            Next
-        </a>
+               asp-route-sortOrder="@ViewData["CurrentSort"]"
+               asp-route-pageNumber="@(Model.PageIndex + 1)"
+               asp-route-searchKey="@ViewData["searchKey"]"
+               asp-route-category="@ViewData["category"]"
+               asp-route-pageSize="@ViewData["pageSize"]"
+               asp-route-min="@ViewData["min"]"
+               asp-route-max="@ViewData["max"]"
+               class="btn btn-default page-link m-2 @nextDisabled">
+                Next
+            </a>
+        </div>
     </div>
 </body>
 </html>
@@ -235,6 +243,7 @@
                                 btn.addClass("btn btn-success btn-sm mb-3 js-add")
                                 document.getElementById('AddButton' + id).innerHTML = "In Your Cart";
                                 toastr.success('Product added successfully');
+                                
                             }
                             else 
                             {

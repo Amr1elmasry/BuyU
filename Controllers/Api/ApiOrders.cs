@@ -30,20 +30,20 @@ namespace BuyU.Controllers.Api
             List<Order> orders = new List<Order>();
             if (user.Orders is not null || user.Orders.Any())
             {
-                orders = await _context.Orders.Include(p => p.products).Where(u => u.UserId == userId).ToListAsync();
+                orders = await _context.Orders.Include(p => p.Products).Where(u => u.UserId == userId).ToListAsync();
             }
             else
             {
                 return Ok("No orders are found");
             }
 
-            var order = _context.Orders.Include(d => d.products).Where(u => u.UserId == userId).Select(p => new MyOrdersViewModel
+            var order = _context.Orders.Include(d => d.Products).Where(u => u.UserId == userId).Select(p => new MyOrdersViewModel
             {
                 UserId = userId,
                 Name = p.Name,
                 Address = p.Address,
                 Email = p.Email,
-                Products = p.products.ToList(),
+                Products = p.Products.ToList(),
                 PhoneNumber = p.PhoneNumber,
                 TotalPrice = (double)p.TotalPrice,
 
@@ -89,7 +89,7 @@ namespace BuyU.Controllers.Api
             var user = await _context.Users.SingleOrDefaultAsync(u => u.Id == userId);
             var cart = await _context.Carts.Include(p => p.Products).Include(p => p.CartProduct).SingleOrDefaultAsync(c => c.UserId == userId);
             double totalprice = model.TotalPrice;
-            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address = model.Address, Email = model.Email, Name = model.Name, PhoneNumber = model.PhoneNumber, products = cart.Products, Status = "Under review" };
+            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address = model.Address, Email = model.Email, Name = model.Name, PhoneNumber = model.PhoneNumber, Products = cart.Products, Status = "Under review" };
             _context.Orders.Add(order);
             _context.SaveChanges();
             var UserOrder = await _context.Orders.Include(p => p.OrderDetails).SingleOrDefaultAsync(u => u.OrderId == order.OrderId);

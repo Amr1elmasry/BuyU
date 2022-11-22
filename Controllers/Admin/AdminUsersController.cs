@@ -29,7 +29,13 @@ namespace BuyU.Controllers.Admin
                 UserName = user.UserName,
                 Email = user.Email,
                 Roles = _userManager.GetRolesAsync(user).Result,
-            });
+            }).ToList();
+            var admins = users.Where(r => r.Roles.ToList().Contains("Admin"));
+            foreach (var admin in admins.ToList())
+            {
+                users.Remove(admin);
+                users.Insert(0, admin);
+            }
             return View(users);
         }
 

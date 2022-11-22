@@ -3,32 +3,32 @@
 @{
     ViewData["Title"] = "Roles";
 }
+<div style="padding-top:80px;">
+    <h1>Roles</h1>
 
-<h1>Roles</h1>
+    <partial name="_RoleForm" model=" new RoleFormViewModel()" />
 
-<partial name="_RoleForm" model=" new RoleFormViewModel()" />
+    <table class="table table-striped mt-4">
 
-<table class="table table-striped mt-4">
-
-    <thead>
-        <tr class="bg-primary text-white">
-            <th>Id</th>
-            <th>Role</th>
-        </tr>
-    </thead>
-
-    <tbody>
-        @foreach (var role in Model)
-        {
-            <tr>
-                <td>@role.Id</td>
-                <td>@role.Name</td>
+        <thead>
+            <tr class="bg-primary text-white">
+                <th>Id</th>
+                <th>Role</th>
             </tr>
-            
-        }
-    </tbody>
-</table>
+        </thead>
 
+        <tbody>
+            @foreach (var role in Model)
+            {
+                <tr>
+                    <td>@role.Id</td>
+                    <td>@role.Name</td>
+                </tr>
+                
+            }
+        </tbody>
+    </table>
+</div>
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />
 }

@@ -9,6 +9,8 @@ using BuyU.Models;
 using System.Collections;
 using BuyU.ViewModel;
 using Microsoft.AspNetCore.Authorization;
+using BuyU.Classes;
+using Microsoft.AspNetCore.Identity;
 
 namespace BuyU.Controllers.Admin
 {
@@ -29,12 +31,69 @@ namespace BuyU.Controllers.Admin
         }
 
         // GET: AdminProducts
-        public async Task<IActionResult> Index()
+        
+        public async Task<IActionResult> Index([FromQuery] HomeFilters? filters)
         {
-            var buyUContext = _context.Products.Include(p => p.Brand);
-            return View(await buyUContext.ToListAsync());
+            if (filters.pageSize == 0 || filters.pageSize == null)
+            {
+                filters.pageSize = 8;
+            }
+            ViewData["searchKey"] = filters.searchKey;
+            ViewData["CurrentSort"] = filters.sortOrder;
+            ViewData["category"] = filters.category;
+            ViewData["min"] = filters.min;
+            ViewData["max"] = filters.max;
+            ViewData["pageSize"] = filters.pageSize;
+            ViewData["brandsName"] = await _context.Brands.Select(b => b.BrandName).ToListAsync();
+            if (filters.searchKey != null)
+            {
+                filters.pageNumber = 1;
+            }
+            else
+            {
+                filters.searchKey = filters.searchKey;
+            }
+            
+            ViewData["Skey"] = filters.searchKey;
+            ViewData["category"] = filters.category;
+
+            var result = Enumerable.Empty<Product>().AsQueryable();
+            var buyUContext = _context.Products.Include(p => p.Brand).Include(c => c.Carts);
+            result = buyUContext.Where(p => true);
+            
+            if (filters.searchKey != null && filters.category == null)
+                result = buyUContext.Where(s => s.Name.Contains(filters.searchKey));
+            
+            else if (filters.category != null && filters.searchKey == null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category);
+            else if (filters.category != null & filters.searchKey != null)
+                result = buyUContext.Where(s => s.Brand.BrandName == filters.category && s.Name.Contains((string)filters.searchKey));
+
+            switch (filters.sortOrder)
+            {
+                case "PriceHighTolow":
+                    result = result.OrderByDescending(p => p.Price);
+                    break;
+                case "PricelowToHigh":
+                    result = result.OrderBy(p => p.Price);
+                    break;
+
+                default:
+                    break;
+            }
+            if (filters.min != null && filters.max == null)
+                result = result.Where(p => p.Price >= filters.min);
+            else if (filters.max != null && filters.min == null)
+                result = result.Where(p => p.Price <= filters.max);
+            else if (filters.min != null && filters.max != null)
+                result = result.Where(p => p.Price >= filters.min && p.Price <= filters.max);
+            ViewData["countOfprod"] = result.Count();
+
+
+            return View(await PaginatedList<Product>.CreateAsync(result.AsNoTracking(), filters.pageNumber ?? 1, (int)filters.pageSize));
 
         }
+
         [HttpPost]
         public async Task<IActionResult> Index(string? searchKey)
         {

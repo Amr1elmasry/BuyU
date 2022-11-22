@@ -54,10 +54,6 @@ namespace BuyU.Controllers
                 Status = "Under review"
                 
             };
-            if (User.IsInRole("Admin"))
-            {
-                _toastNotification.AddAlertToastMessage("There Is New Order");
-            }
 
             return View(order);
         }
@@ -70,7 +66,11 @@ namespace BuyU.Controllers
             var userId = user.Id;
             var cart = await _context.Carts.Include(p => p.Products).Include(p=>p.CartProduct).SingleOrDefaultAsync(c => c.UserId == userId);
             double totalprice = model.TotalPrice;
-            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address= model.Address , Email = model.Email , Name = model.Name , PhoneNumber = model.PhoneNumber , products = cart.Products , Status = "Under review"};
+            var order = new Order { dateTime = DateTime.Now, TotalPrice = totalprice, User = user, UserId = userId, Address= model.Address , Email = model.Email , Name = model.Name , PhoneNumber = model.PhoneNumber , Status = "Under review"};
+            foreach (var product in cart.Products)
+            {
+                order.Products.Add(product);
+            }
             _context.Orders.Add(order);
             _context.SaveChanges();
             var UserOrder = await _context.Orders.Include(p=>p.OrderDetails).SingleOrDefaultAsync(u => u.OrderId == order.OrderId);
@@ -80,8 +80,6 @@ namespace BuyU.Controllers
                 UserOrder.OrderDetails.Add(orderDetails);
             }
             _context.SaveChanges();
-            var temporders = await _context.Orders.Include(p => p.products).Where(u => u.UserId == userId).ToListAsync();
-            //cart.CartProduct.RemoveAll(u=>u.CartId==cart.CartId);
             ViewData["TotalPrice"] = totalprice;
             var userCart = await _context.Carts.Include(c => c.Products).Where(u=>u.UserId==userId).SingleOrDefaultAsync();
             userCart.Products.Clear();
@@ -95,33 +93,16 @@ namespace BuyU.Controllers
             var user = await _userManager.FindByNameAsync(User.Identity.Name);
             ViewData["userName"] = user.UserName;
             var userId = user.Id;
-            user = await _context.Users.Include(o => o.Orders).SingleOrDefaultAsync(u => u.Id == userId);
-            List<Order> orders = new List<Order> ();
-            if(user.Orders is not null || user.Orders.Any())
-            {
-                orders = await _context.Orders.Include(p=>p.products).Where(u=>u.UserId==userId).ToListAsync();
-                //orders = user.Orders.OrderByDescending(d => d.dateTime).ToList();
-            }
+            List<Order> orders = new List<Order>();
+            orders = await _context.Orders
+                .Where(o=>o.UserId==userId)
+                .Include(o => o.OrderDetails)
+                .ThenInclude(o => o.Product).ToListAsync();
+            if (orders is not null || orders.Any())
+                return View(orders);
             else
-            {
-                return View(new MyOrdersViewModel());
-            }
 
-            var order = _context.Orders.Include(d => d.products).Where(u => u.UserId == userId).Select(p => new MyOrdersViewModel
-            {
-                UserId = userId,
-                Name = p.Name,
-                Address = p.Address,
-                Email = p.Email,
-                Products = p.products.ToList(),
-                PhoneNumber = p.PhoneNumber,
-                TotalPrice = (double)p.TotalPrice,
-                
-                Status = p.Status,
-
-            }).ToList();
-            //orders
-            return View(order);
+            return View (new List<Order>());
 
         }
     }

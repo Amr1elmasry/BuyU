@@ -16,61 +16,61 @@
 </head>
 <body>
 
+    <div style="padding-top:80px;">
+        <div class="row">
+            <form asp-action="Index" method="POST" class="input-group">
+                <input class="form-control" type="text" id="sKey" name="searchKey" value=@ViewBag.Skey />
+                <div class="input-group-btn">
+                    <button type="submit" class="btn btn-primary" onclick="myFunction()">
+                        <i class="bi bi-check"></i>
+                        Search
+                    </button>
+                    <a asp-action="Index" class=" btn btn-outline-secondary">
+                        <i class="bi bi-cancel"></i>
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="row mt-3">
+            @if (!Model.Any())
+            {
+                var x = ViewBag.Skey;
+                <div class="text-center mt-5" id="searchArea">
+                    <h2 style="color:blue; font-family:cursive">@($"No Results About {x}")</h2>
+                </div>
 
-    <div class="row">
-        <form asp-action="Index" method="POST" class="input-group">
-            <input class="form-control" type="text" id="sKey" name="searchKey" value=@ViewBag.Skey />
-            <div class="input-group-btn">
-                <button type="submit" class="btn btn-primary" onclick="myFunction()">
-                    <i class="bi bi-check"></i>
-                    Search
-                </button>
-                <a asp-action="Index" class=" btn btn-outline-secondary">
-                    <i class="bi bi-cancel"></i>
-                    Cancel
-                </a>
-            </div>
-        </form>
-    </div>
-    <div class="row mt-3">
-        @if (!Model.Any())
-        {
-            var x = ViewBag.Skey;
-            <div class="text-center mt-5" id="searchArea">
-                <h2 style="color:blue; font-family:cursive">@($"No Results About {x}")</h2>
-            </div>
+            }
+            @foreach (var item in Model)
+            {
+                string con;
+                <div class="col-3 ">
+                    <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
+                        <div class=" img-fluid text-center ">
+                            <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
+                        </div>
+                        <div class="card-body justify-content-between">
+                            <h5 class="card-title h-25 ">@item.Name</h5>
+                            <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
+                            <div class="col-md-13 ">
 
-        }
-        @foreach (var item in Model)
-        {
-            string con;
-            <div class="col-3 ">
-                <div class="card text-center mr-5 mb-3" style="width: 18rem; height:18rem;">
-                    <div class=" img-fluid text-center ">
-                        <img class="card-img-top" style="width:100px; height:120px;" src="@item.Photo" alt="@item.Name">
-                    </div>
-                    <div class="card-body justify-content-between">
-                        <h5 class="card-title h-25 ">@item.Name</h5>
-                        <p class="card-text">@(item.Description.Length > 50 ? $"{item.Description.Substring(0, 50)}..." : item.Description)</p>
-                        <div class="col-md-13 ">
-
-                            @if (User.IsInRole("Admin"))
-                            {
-                                con = "AdminProducts";
-                            }
-                            else
-                            {
-                                con = "UserProducts";
-                            }
-                            <a style="margin-right:10px" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
-                            
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    con = "AdminProducts";
+                                }
+                                else
+                                {
+                                    con = "UserProducts";
+                                }
+                                <a style="margin-right:10px" asp-controller=@con asp-action="Details" asp-route-id="@item.ProductId">Details</a>
+                                
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        }
+            }
+        </div>
     </div>
-
 </body>
 </html>
 

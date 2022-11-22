@@ -4,121 +4,121 @@
     ViewData["Title"] = "Accept Order";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-    
-<h2>Order Items</h2>
+<div style="padding-top:80px;">    
+    <h2>Order Items</h2>
 
-<a asp-action="CartProducts" asp-controller="UserCart">Edit Cart</a>
-<form method="post" asp-action="Order" class="d-flex input-group mt-2">
-    <div class="table-responsive w-100">
-        <table class="table table-striped table-bordered align-middle">
-            <thead>
-                <tr>
-                    <th>
-                        Name
-                    </th>
-                    <th>
-                        Description
-                    </th>
-                    <th>
-                        Price
-                    </th>
-                    <th>
-                        Photo
-                    </th>
-                    <th>
-                        Color
-                    </th>
-                    <th>
-                        Quantity
-                    </th>
-
-                </tr>
-            </thead>
-            <tbody class="">
-                @for (int i = 0; i< Model.cartProducts.Count(); i++)
-                {
-                    
+    <a asp-action="CartProducts" asp-controller="UserCart">Edit Cart</a>
+    <form method="post" asp-action="Order" class="d-flex input-group mt-2">
+        <div class="table-responsive w-100">
+            <table class="table table-striped table-bordered align-middle">
+                <thead>
                     <tr>
-                        <input asp-for="@Model.cartProducts[i].CartId" type="hidden" value="@Model.cartProducts[i].CartId">
-                        <input asp-for="@Model.cartProducts[i].ProductId" type="hidden" value="@Model.cartProducts[i].ProductId">
-                        <input asp-for="@Model.cartProducts[i].dateTime" type="hidden" value="@Model.cartProducts[i].dateTime">
-                        <td>
-                            @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Name)
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Description)
-                        </td>                                 
-                        <td>
-                            @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Price)
-                        </td>
-                        <td>
-                            <img width="50px" height="50px" src="@Model.cartProducts[i].Product.Photo" alt="@Model.cartProducts[i].Product.Name">
-                            
-                        </td>
-                        <td>
-                            @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Color)
-                        </td>                                 
-                        <td>
-                            @Html.DisplayFor(modelItem =>Model.cartProducts[i].Quantity)
-                            <input asp-for="@Model.cartProducts[i].Quantity" type="hidden" value="@Model.cartProducts[i].Quantity">
-                            
-                        </td>
+                        <th>
+                            Name
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                        <th>
+                            Price
+                        </th>
+                        <th>
+                            Photo
+                        </th>
+                        <th>
+                            Color
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
 
                     </tr>
-                }
+                </thead>
+                <tbody class="">
+                    @for (int i = 0; i< Model.cartProducts.Count(); i++)
+                    {
+                        
+                        <tr>
+                            <input asp-for="@Model.cartProducts[i].CartId" type="hidden" value="@Model.cartProducts[i].CartId">
+                            <input asp-for="@Model.cartProducts[i].ProductId" type="hidden" value="@Model.cartProducts[i].ProductId">
+                            <input asp-for="@Model.cartProducts[i].dateTime" type="hidden" value="@Model.cartProducts[i].dateTime">
+                            <td>
+                                @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Name)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Description)
+                            </td>                                 
+                            <td>
+                                @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Price)
+                            </td>
+                            <td>
+                                <img width="50px" height="50px" src="@Model.cartProducts[i].Product.Photo" alt="@Model.cartProducts[i].Product.Name">
+                                
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem =>Model.cartProducts[i].Product.Color)
+                            </td>                                 
+                            <td>
+                                @Html.DisplayFor(modelItem =>Model.cartProducts[i].Quantity)
+                                <input asp-for="@Model.cartProducts[i].Quantity" type="hidden" value="@Model.cartProducts[i].Quantity">
+                                
+                            </td>
 
-            </tbody>
-        </table>
-    </div>
+                        </tr>
+                    }
 
-
-    <div class="row w-75 d-flex  jus justify-content-between mt-3">
-        <div class=" col-6">
-            <h2>Confirm Your Infromation</h2>
-                <div class="input-group mb-2">
-                    <span class="input-group-text">Name</span>
-                    <input asp-for="@Model.Name" type="text" aria-label="name" class="form-control" value="@Model.Name">
-                </div>
-
-                <div class="input-group mb-2">
-                    <span class="input-group-text">Email</span>
-                    <input asp-for="@Model.Email" type="email" aria-label="Email" class="form-control" value="@Model.Email">
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text">Address</span>
-                    <input asp-for="@Model.Address" type="text" aria-label="Address" class="form-control" value="@Model.Address">
-                </div>
-                <div class="input-group mb-2">
-                    <span class="input-group-text">PhoneNumber</span>
-                    <input asp-for="@Model.PhoneNumber" type="tel" aria-label="PhoneNumber" class="form-control" value="@Model.PhoneNumber">
-                </div>
-                <input asp-for="@Model.TotalPrice" type="hidden" value="@Model.TotalPrice" />
-
-                <div class="container mt-2">
-                    <div class=" row justify-content-center ">
-                        <div class="text-center">
-                            <button type="submit" class="btn btn-primary ">
-                                Confirm Order
-                            </button>
-                            <a asp-action="CartProducts" asp-controller="UserCart" class=" btn btn-outline-secondary  ">
-                                Cancel
-                            </a>
-                        </div>
-                    
-                    </div>
-                </div>
+                </tbody>
+            </table>
         </div>
-        <div class="col-3 mt-4">
-            <div class="d-flex justify-content-center mt-5">
-                <span class="p-2 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
-                    Total Price Is : @Model.TotalPrice
-                
-                </span>
+
+
+        <div class="row w-75 d-flex  jus justify-content-between mt-3">
+            <div class=" col-6">
+                <h2>Confirm Your Infromation</h2>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Name</span>
+                        <input asp-for="@Model.Name" type="text" aria-label="name" class="form-control" value="@Model.Name">
+                    </div>
+
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Email</span>
+                        <input asp-for="@Model.Email" type="email" aria-label="Email" class="form-control" value="@Model.Email">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">Address</span>
+                        <input asp-for="@Model.Address" type="text" aria-label="Address" class="form-control" value="@Model.Address">
+                    </div>
+                    <div class="input-group mb-2">
+                        <span class="input-group-text">PhoneNumber</span>
+                        <input asp-for="@Model.PhoneNumber" type="tel" aria-label="PhoneNumber" class="form-control" value="@Model.PhoneNumber">
+                    </div>
+                    <input asp-for="@Model.TotalPrice" type="hidden" value="@Model.TotalPrice" />
+
+                    <div class="container mt-2">
+                        <div class=" row justify-content-center ">
+                            <div class="text-center">
+                                <button type="submit" class="btn btn-primary ">
+                                    Confirm Order
+                                </button>
+                                <a asp-action="CartProducts" asp-controller="UserCart" class=" btn btn-outline-secondary  ">
+                                    Cancel
+                                </a>
+                            </div>
+                        
+                        </div>
+                    </div>
+            </div>
+            <div class="col-3 mt-4">
+                <div class="d-flex justify-content-center mt-5">
+                    <span class="p-2 bg-info bg-opacity-10 border border-info border rounded fw-bolder mt-3 ">
+                        Total Price Is : @Model.TotalPrice
+                    
+                    </span>
+                </div>
             </div>
         </div>
-    </div>
-</form>
-
+    </form>
+</div>
     
 
 @section Scripts {
