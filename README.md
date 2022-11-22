@@ -31,7 +31,7 @@ http://www.buyu.somee.com/
 # Api Section
 ![image](https://user-images.githubusercontent.com/56364993/202832996-f19aae0d-1379-41d9-b5c2-ec354e74c1f5.png)
 
-#Admin Dashboard and some functions
+# Admin Dashboard and some functions
 
 ## Dashboard 
 ![image](https://user-images.githubusercontent.com/56364993/203275372-f4ff0349-dc15-44db-95c0-e4d16bfc4db6.png)
